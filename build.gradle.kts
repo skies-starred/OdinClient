@@ -18,6 +18,7 @@ repositories {
     fun strictMaven(url: String, vararg groups: String) = maven(url) { content { groups.forEach(::includeGroupAndSubgroups) } }
 
     strictMaven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1", "me.djtheredstoner")
+    strictMaven("https://api.modrinth.com/maven", "maven.modrinth")
     strictMaven("https://jitpack.io", "com.github.stivais", "com.github.odtheking", "com.github.sivthepolarfox")
 }
 
@@ -36,10 +37,15 @@ dependencies {
     modRuntimeOnly(libs.devauth)
 
     modImplementation("fabric-api".mc(mc))
-    modImplementation("odin".mc(mc))
+    modImplementation(fletchingTable.modrinth("odin", mc))
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.language.kotlin)
     shadow(libs.commodore)
+
+    // needed by odin to work properly in dev env as we use modrinth which doesn't provide the transitive dependencies
+    modImplementation(libs.okhttp)
+    modImplementation(libs.okio)
+    modImplementation(libs.lwjgl.nanovg)
 }
 
 loom {

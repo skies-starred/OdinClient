@@ -13,8 +13,10 @@ fabric-language-kotlin = "1.13.7+kotlin.2.2.21"
 fabric-api-1-21-8 = "0.136.1+1.21.8"
 fabric-api-1-21-10 = "0.138.3+1.21.10"
 
-odin-1-21-8 = "0.0.5"
-odin-1-21-10 = "1.21.10-test-SNAPSHOT"
+# needed by odin to work properly in dev env as we use modrinth which doesn't provide the transitive dependencies
+okhttp = "5.2.1"
+okio = "3.16.1"
+lwjgl-nanovg = "3.3.3"
 
 [libraries]
 fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-loader" }
@@ -23,11 +25,13 @@ fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", versi
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 commodore = { module = "com.github.stivais:Commodore", version.ref = "commodore" }
 
-odin-1-21-8 = { module = "com.github.odtheking:odinfabric", version.ref = "odin-1-21-8" }
-odin-1-21-10 = { module = "com.github.sivthepolarfox:OdinFabric", version.ref = "odin-1-21-10" }
-
 fabric-api-1-21-8 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-8" }
 fabric-api-1-21-10 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-10" }
+
+# needed by odin to work properly in dev env as we use modrinth which doesn't provide the transitive dependencies
+okhttp = { module = "com.squareup.okhttp3:okhttp-jvm", version.ref = "okhttp" }
+okio = { module = "com.squareup.okio:okio-jvm", version.ref = "okio" }
+lwjgl-nanovg = { module = "org.lwjgl:lwjgl-nanovg", version.ref = "lwjgl-nanovg" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

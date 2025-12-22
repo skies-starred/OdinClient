@@ -15,9 +15,9 @@ import starred.skies.odin.features.impl.cheats.*
 object OdinClient : ClientModInitializer {
     private val categoryCache = mutableMapOf<String, Category>()
 
-    private val modulesToRegister = arrayOf<Module>(
+    private val modulesToRegister = arrayOf(
         CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear,
-        Highlight
+        Highlight, AutoClicker, Gloomlock, EscrowFix, AutoGFS
     )
 
     init {
