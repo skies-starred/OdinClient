@@ -40,7 +40,7 @@ dependencies {
     modImplementation("odin".mc(mc))
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.language.kotlin)
-    shadow(libs.commodore)
+    modImplementation(libs.commodore)
 
     // needed by odin to work properly in dev env as we use modrinth which doesn't provide the transitive dependencies
     modImplementation(libs.okhttp)
