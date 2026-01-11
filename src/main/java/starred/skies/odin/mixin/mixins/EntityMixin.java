@@ -1,4 +1,4 @@
-package starred.skies.odin.mixin;
+package starred.skies.odin.mixin.mixins;
 
 import net.minecraft.world.entity.Entity;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,4 +1,4 @@
-package starred.skies.odin.mixin.od.terminals;
+package starred.skies.odin.mixin.mixins.od.terminals;
 
 import com.odtheking.odin.features.impl.floor7.terminalhandler.*;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;

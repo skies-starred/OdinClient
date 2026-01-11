@@ -1,4 +1,4 @@
-package starred.skies.odin.mixin.od.terminals;
+package starred.skies.odin.mixin.mixins.od.terminals;
 
 import com.odtheking.odin.features.impl.floor7.terminalhandler.*;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
@@ -11,8 +11,8 @@ import starred.skies.odin.events.TerminalUpdateEvent;
 
 import java.util.List;
 
-@Mixin(value = StartsWithHandler.class, remap = false)
-abstract class StartsWithHandlerMixin {
+@Mixin(value = NumbersHandler.class, remap = false)
+abstract class NumbersHandlerMixin {
     @Inject(method = "handleSlotUpdate", at = @At("RETURN"), remap = false)
     private void afterHandleSlotUpdate(ClientboundContainerSetSlotPacket packet, List<ItemStack> items, CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
@@ -20,4 +20,3 @@ abstract class StartsWithHandlerMixin {
         }
     }
 }
-

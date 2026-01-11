@@ -1,4 +1,4 @@
-package starred.skies.odin.mixin;
+package starred.skies.odin.mixin.mixins;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;

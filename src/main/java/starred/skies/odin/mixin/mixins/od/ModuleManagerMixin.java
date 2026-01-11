@@ -1,4 +1,4 @@
-package starred.skies.odin.mixin.od;
+package starred.skies.odin.mixin.mixins.od;
 
 import com.odtheking.odin.config.ModuleConfig;
 import com.odtheking.odin.features.Module;

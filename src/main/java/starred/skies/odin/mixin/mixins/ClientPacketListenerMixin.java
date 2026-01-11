@@ -1,4 +1,4 @@
-package starred.skies.odin.mixin;
+package starred.skies.odin.mixin.mixins;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.multiplayer.ClientLevel;
