@@ -3,7 +3,7 @@ package starred.skies.odin.features
 import com.google.gson.JsonArray
 import com.odtheking.odin.OdinMod.mc
 import com.odtheking.odin.OdinMod.scope
-import com.odtheking.odin.events.WorldLoadEvent
+import com.odtheking.odin.events.*
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.network.WebUtils
@@ -36,7 +36,7 @@ object UpdateNotifier {
     }
 
     init {
-        on<WorldLoadEvent> {
+        on</*? >= 1.21.10 {*/WorldEvent.Load/*? } else { *//*WorldLoadEvent*//*? } */> {
             if (times++ >= 3) return@on
 
             if (times == 1) {

@@ -36,10 +36,10 @@ object CloseChest : Module(
         on<GuiEvent.KeyPress> {
             if (!DungeonUtils.inDungeons) return@on
             //? if >= 1.21.10 {
-            /*if (!mc.options.keyInventory.matches(input)) handleInput(screen)
-            *///? } else {
-            if (!mc.options.keyInventory.matches(keyCode, scanCode)) handleInput(screen)
-            //? }
+            if (!mc.options.keyInventory.matches(input)) handleInput(screen)
+            //? } else {
+            /*if (!mc.options.keyInventory.matches(keyCode, scanCode)) handleInput(screen)
+            *///? }
         }
 
         on<GuiEvent.MouseClick> {

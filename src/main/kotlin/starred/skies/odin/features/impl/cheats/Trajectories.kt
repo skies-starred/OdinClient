@@ -28,8 +28,8 @@ import starred.skies.odin.utils.Skit
 import kotlin.math.*
 
 //? if < 1.21.10 {
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
-//? }
+/*import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderContext
+*///? }
 
 object Trajectories : Module(
     name = "Trajectories",
@@ -63,7 +63,7 @@ object Trajectories : Module(
             if ((lastCharge - charge) > 1f) lastCharge = charge
         }
 
-        on<RenderEvent./*? if >=1.21.10 {*//*Extract*//*?} else {*/Last/*?}*/> {
+        on<RenderEvent./*? if >=1.21.10 {*/Extract/*?} else {*//*Last*//*?}*/> {
             entityRenderQueue.clear()
             boxRenderQueue.clear()
             pearlImpactPos = null
@@ -72,30 +72,30 @@ object Trajectories : Module(
             val heldItem = player.mainHandItem
 
             if (bows && heldItem.item is BowItem) {
-                val trajectory = /*? if <1.21.10 {*/context./*?}*/calculateTrajectory(0f, isPearl = false, useCharge = true)
+                val trajectory = /*? if <1.21.10 {*//*context.*//*?}*/calculateTrajectory(0f, isPearl = false, useCharge = true)
 
-                if (lines) /*? if <1.21.10 {*/context./*?}*/drawLine(trajectory.first, color, depth, width)
-                if (boxes) /*? if <1.21.10 {*/context./*?}*/drawCollisionBoxes(isPearl = false)
+                if (lines) /*? if <1.21.10 {*//*context.*//*?}*/drawLine(trajectory.first, color, depth, width)
+                if (boxes) /*? if <1.21.10 {*//*context.*//*?}*/drawCollisionBoxes(isPearl = false)
                 trajectory.second?.let { hit ->
-                    if (plane) /*? if <1.21.10 {*/context./*?}*/drawPlaneCollision(hit)
+                    if (plane) /*? if <1.21.10 {*//*context.*//*?}*/drawPlaneCollision(hit)
                 }
             }
 
             if (pearls && heldItem.item is EnderpearlItem) {
                 if (heldItem.displayName?.string?.contains("Spirit") == true) return@on
 
-                val trajectory = /*? if <1.21.10 {*/context./*?}*/calculateTrajectory(0f, isPearl = true)
+                val trajectory = /*? if <1.21.10 {*//*context.*//*?}*/calculateTrajectory(0f, isPearl = true)
 
-                if (lines) /*? if <1.21.10 {*/context./*?}*/drawLine(trajectory.first, color, depth, width)
-                if (boxes) /*? if <1.21.10 {*/context./*?}*/drawCollisionBoxes(isPearl = true)
+                if (lines) /*? if <1.21.10 {*//*context.*//*?}*/drawLine(trajectory.first, color, depth, width)
+                if (boxes) /*? if <1.21.10 {*//*context.*//*?}*/drawCollisionBoxes(isPearl = true)
                 trajectory.second?.let { hit ->
-                    if (plane) /*? if <1.21.10 {*/context./*?}*/drawPlaneCollision(hit)
+                    if (plane) /*? if <1.21.10 {*//*context.*//*?}*/drawPlaneCollision(hit)
                 }
             }
         }
     }
 
-    private fun /*? >= 1.21.10 { *//*RenderEvent.Extract*//*? } else {*/WorldRenderContext/*? }*/.calculateTrajectory(
+    private fun /*? >= 1.21.10 { */RenderEvent.Extract/*? } else {*//*WorldRenderContext*//*? }*/.calculateTrajectory(
         yawOffset: Float,
         isPearl: Boolean,
         useCharge: Boolean = false
@@ -156,7 +156,7 @@ object Trajectories : Module(
         return lines to rayTraceHit
     }
 
-    private fun /*? >= 1.21.10 { *//*RenderEvent.Extract*//*? } else {*/WorldRenderContext/*? }*/.drawPlaneCollision(hit: BlockHitResult) {
+    private fun /*? >= 1.21.10 { */RenderEvent.Extract/*? } else {*//*WorldRenderContext*//*? }*/.drawPlaneCollision(hit: BlockHitResult) {
         val (vec1, vec2) = when (hit.direction) {
             Direction.DOWN, Direction.UP -> hit.location.addVec(-0.15 * planeSize, -0.02, -0.15 * planeSize) to hit.location.addVec(0.15 * planeSize, 0.02, 0.15 * planeSize)
             Direction.NORTH, Direction.SOUTH -> hit.location.addVec(-0.15 * planeSize, -0.15 * planeSize, -0.02) to hit.location.addVec(0.15 * planeSize, 0.15 * planeSize, 0.02)
@@ -167,7 +167,7 @@ object Trajectories : Module(
         drawFilledBox(AABB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z), color.multiplyAlpha(0.5f), depth)
     }
 
-    private fun /*? >= 1.21.10 { *//*RenderEvent.Extract*//*? } else {*/WorldRenderContext/*? }*/.drawCollisionBoxes(isPearl: Boolean) {
+    private fun /*? >= 1.21.10 { */RenderEvent.Extract/*? } else {*//*WorldRenderContext*//*? }*/.drawCollisionBoxes(isPearl: Boolean) {
         if (isPearl) {
             pearlImpactPos?.let { aabb ->
                 drawWireFrameBox(aabb, color, width, depth)

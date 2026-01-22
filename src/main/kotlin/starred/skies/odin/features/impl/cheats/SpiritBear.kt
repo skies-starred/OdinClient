@@ -4,10 +4,7 @@ import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.ColorSetting
 import com.odtheking.odin.clickgui.settings.impl.SelectorSetting
-import com.odtheking.odin.events.BlockUpdateEvent
-import com.odtheking.odin.events.RenderEvent
-import com.odtheking.odin.events.TickEvent
-import com.odtheking.odin.events.WorldLoadEvent
+import com.odtheking.odin.events.*
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.Colors
@@ -85,11 +82,11 @@ object SpiritBear : Module(
             if (entity?.isAlive == false) entity = null
         }
 
-        on<RenderEvent./*? if >=1.21.10 {*//*Extract*//*?} else {*/Last/*?}*/> {
+        on<RenderEvent./*? if >=1.21.10 {*/Extract/*?} else {*//*Last*//*?}*/> {
             if (!DungeonUtils.isFloor(4) || !DungeonUtils.inBoss || !highlightSpirit) return@on
             entity?.let {
-                /*? if <1.21.10 {*/context./*?}*/drawStyledBox(it.renderBoundingBox, color, renderStyle, depthCheck)
-                if (tracer) /*? if <1.21.10 {*/context./*?}*/drawTracer(it.position().addVec(y = it.eyeHeight), color, depth = depthCheck)
+                /*? if <1.21.10 {*//*context.*//*?}*/drawStyledBox(it.renderBoundingBox, color, renderStyle, depthCheck)
+                if (tracer) /*? if <1.21.10 {*//*context.*//*?}*/drawTracer(it.position().addVec(y = it.eyeHeight), color, depth = depthCheck)
             }
         }
 
@@ -97,7 +94,7 @@ object SpiritBear : Module(
             if (timer > 0) timer--
         }
 
-        on<WorldLoadEvent> {
+        on</*? >= 1.21.10 {*/WorldEvent.Load/*? } else { *//*WorldLoadEvent*//*? } */> {
             kills = 0
             timer = -1
         }
