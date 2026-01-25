@@ -36,6 +36,7 @@ object OdinClient : ClientModInitializer {
 
     const val MOD_VERSION: String = /*$ mod_version*/ "0.1.3-r1"
     val moduleConfig: ModuleConfig = ModuleConfig("odinClient")
+    val joinListeners = mutableListOf<() -> Unit>()
 
     override fun onInitializeClient() {
         ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
@@ -46,6 +47,9 @@ object OdinClient : ClientModInitializer {
         EventBus.subscribe(UpdateNotifier)
 
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
+            for (fn in joinListeners.toList()) fn.invoke()
+            joinListeners.clear()
+
             if (!send) return@register
             if (lastInstall != MOD_VERSION) li()
         }
