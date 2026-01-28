@@ -1,5 +1,6 @@
 package starred.skies.odin.features.impl.cheats
 
+import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.*
 import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.core.on
@@ -22,6 +23,9 @@ object AutoGFS : Module(
     private val inKuudra by BooleanSetting("In Kuudra", true, desc = "Only gfs in Kuudra.")
     private val inDungeon by BooleanSetting("In Dungeon", true, desc = "Only gfs in Dungeons.")
     private val refillOnDungeonStart by BooleanSetting("Refill on Dungeon Start", true, desc = "Refill when a dungeon starts.")
+    private val refillOnTimer by BooleanSetting("Refill on Timer", true, desc = "Refill on a timed interval.")
+    private val timerIncrements by NumberSetting("Timer Increments", 5, 1, 60, 1, desc = "The interval in which to refill.", unit = "s")
+        .withDependency { refillOnTimer }
     private val refillPearl by BooleanSetting("Refill Pearl", true, desc = "Refill ender pearls.")
     private val refillJerry by BooleanSetting("Refill Jerry", true, desc = "Refill inflatable jerrys.")
     private val refillTNT by BooleanSetting("Refill TNT", true, desc = "Refill superboom tnt.")
@@ -31,6 +35,7 @@ object AutoGFS : Module(
     private val startRegex = Regex("\\[NPC] Mort: Here, I found this map when I first entered the dungeon\\.|\\[NPC] Mort: Right-click the Orb for spells, and Left-click \\(or Drop\\) to use your Ultimate!")
 
     init {
+        scheduleRefill()
         on<ChatPacketEvent> {
             when {
                 value.matches(puzzleFailRegex) -> {
@@ -45,6 +50,14 @@ object AutoGFS : Module(
                     if (refillOnDungeonStart) refill()
                 }
             }
+        }
+    }
+
+    private fun scheduleRefill() {
+        val delayTicks = timerIncrements * 20
+        schedule(delayTicks) {
+            if (enabled && refillOnTimer) refill()
+            scheduleRefill()
         }
     }
 
