@@ -54,6 +54,7 @@ object EtherwarpHelper : Module(
 
             ticksLeft--
 
+            if (mc.screen != null) return@on
             when (ticksLeft) {
                 1 -> action()
                 0 -> KeyMapping.set((mc.options.keyShift as KeyMappingAccessor).boundKey, false)
