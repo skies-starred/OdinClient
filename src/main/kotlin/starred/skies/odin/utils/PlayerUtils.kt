@@ -7,15 +7,11 @@ import starred.skies.odin.mixin.accessors.KeyMappingAccessor
 fun rightClick() {
     val options = mc.options ?: return
     val key = (options.keyUse as KeyMappingAccessor).boundKey
-    KeyMapping.set(key, true)
     KeyMapping.click(key)
-    KeyMapping.set(key, false)
 }
 
 fun leftClick() {
     val options = mc.options ?: return
     val key = (options.keyAttack as KeyMappingAccessor).boundKey
-    KeyMapping.set(key, true)
     KeyMapping.click(key)
-    KeyMapping.set(key, false)
 }
