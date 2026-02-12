@@ -5,6 +5,7 @@ import com.odtheking.odin.clickgui.settings.impl.*
 import com.odtheking.odin.events.ChatPacketEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
+import com.odtheking.odin.features.impl.dungeon.puzzlesolvers.PuzzleSolvers
 import com.odtheking.odin.utils.fillItemFromSack
 import com.odtheking.odin.utils.handlers.schedule
 import com.odtheking.odin.utils.itemId
@@ -14,6 +15,7 @@ import com.odtheking.odin.utils.skyblock.KuudraUtils
 import com.odtheking.odin.utils.skyblock.LocationUtils
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.skyblock.dungeon.tiles.RoomType
+import starred.skies.odin.mixin.accessors.PuzzleSolversAccessor
 import starred.skies.odin.utils.Skit
 
 object AutoGFS : Module(
@@ -40,10 +42,13 @@ object AutoGFS : Module(
 
     init {
         scheduleRefill()
+
         on<ChatPacketEvent> {
             when {
                 value.matches(puzzleFailRegex) -> {
                     if (!autoGetDraft || DungeonUtils.currentRoom?.data?.type != RoomType.PUZZLE) return@on
+                    if ((PuzzleSolvers as PuzzleSolversAccessor).invokeDraft()) return@on
+
                     schedule(30) {
                         modMessage("§7Fetching Draft from sack...")
                         sendCommand("gfs architect's first draft 1")
