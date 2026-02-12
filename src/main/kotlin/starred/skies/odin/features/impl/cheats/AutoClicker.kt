@@ -11,6 +11,8 @@ import org.lwjgl.glfw.GLFW
 import starred.skies.odin.utils.Skit
 import starred.skies.odin.utils.leftClick
 import starred.skies.odin.utils.rightClick
+import starred.skies.odin.mixin.accessors.KeyMappingAccessor
+import net.minecraft.client.KeyMapping
 
 object AutoClicker : Module(
     name = "Auto Clicker",
@@ -56,7 +58,15 @@ object AutoClicker : Module(
                     rightClick()
                 }
             }
+
+            blockLeftClick()
         }
+    }
+
+    private fun blockLeftClick() {
+            val options = mc.options ?: return
+            val key = (options.keyAttack as KeyMappingAccessor).boundKey
+            KeyMapping.set(key, false)
     }
 
     private fun InputConstants.Key.isPressed(): Boolean {
