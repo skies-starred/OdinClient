@@ -38,6 +38,8 @@ object AutoClicker : Module(
             if (mc.screen != null) return@on
             if (mc.player == null) return@on
             if (mc.player!!.isUsingItem) return@on
+            if (mc.gameMode?.isDestroying ?: false) return@on
+            if (mc.player?.mainHandItem?.itemId == "DUNGEONBREAKER") return@on
 
             val nowMillis = System.currentTimeMillis()
             if (terminatorOnly) {
