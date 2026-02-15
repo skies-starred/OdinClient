@@ -16,13 +16,14 @@ import net.minecraft.network.chat.Component
 import net.minecraft.network.chat.HoverEvent
 import net.minecraft.network.chat.Style
 import starred.skies.odin.commands.autoSellCommand
+import starred.skies.odin.commands.streamCommand
 import starred.skies.odin.features.UpdateNotifier
 import starred.skies.odin.features.impl.cheats.*
 import starred.skies.odin.helpers.Scribble
 import java.net.URI
 
 object OdinClient : ClientModInitializer {
-    private val commandsToRegister: Array<Commodore> = arrayOf(autoSellCommand)
+    private val commandsToRegister: Array<Commodore> = arrayOf(autoSellCommand, streamCommand)
 
     private val modulesToRegister: Array<Module> = arrayOf(
         CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear, TriggerBot,
