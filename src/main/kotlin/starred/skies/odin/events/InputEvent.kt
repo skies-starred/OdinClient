@@ -12,6 +12,6 @@ sealed class InputEvent {
 
         data class Release(
             val buttonInfo: MouseButtonInfo
-        ) : Event()
+        ) : Event
     }
 }
