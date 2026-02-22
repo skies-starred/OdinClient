@@ -70,10 +70,14 @@ object DoorESP : Module(
         }
 
         on<TickEvent.End> {
+            if (!DungeonUtils.inDungeons) return@on
+            if (DungeonUtils.inBoss) return@on
             if (!DungeonMap.enabled) MapScanner.scan(world)
         }
 
         onReceive<ClientboundMapItemDataPacket> {
+            if (!DungeonUtils.inDungeons) return@onReceive
+            if (DungeonUtils.inBoss) return@onReceive
             if (!DungeonMap.enabled) mc.execute { DungMap.rescanMapItem(this) }
         }
     }
