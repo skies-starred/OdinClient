@@ -17,6 +17,7 @@ import com.odtheking.odin.features.impl.dungeon.map.MapScanner
 import com.odtheking.odin.features.impl.dungeon.map.SpecialColumn
 import com.odtheking.odin.utils.Colors
 import com.odtheking.odin.utils.render.drawStyledBox
+import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.skyblock.dungeon.ScanUtils
 import net.minecraft.network.protocol.game.ClientboundMapItemDataPacket
 import net.minecraft.world.phys.AABB
@@ -38,6 +39,9 @@ object DoorESP : Module(
 
     init {
         on<RenderEvent.Extract> {
+            if (!DungeonUtils.inDungeons) return@on
+            if (DungeonUtils.inBoss) return@on
+
             val currentRoomName = ScanUtils.currentRoom?.data?.name
 
             for (d in MapScanner.doors) {
