@@ -1,6 +1,7 @@
 package starred.skies.odin.features.impl.cheats
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
+import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.clickgui.settings.impl.SelectorSetting
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.WorldEvent
@@ -35,6 +36,9 @@ object WorldScanner : Module(
     private val scanFairyGrottos by BooleanSetting("Scan Fairy Grottos", true, desc = "Scans for fairy grottos")
     private val scanDragonNest by BooleanSetting("Scan Dragon Nest", true, desc = "Scans for golden dragon nest")
     private val scanWormFishing by BooleanSetting("Scan Worm Fishing", false, desc = "Scans for worm fishing spots")
+    private val lavaEsp by BooleanSetting("Lava ESP", false, desc = "Highlights lava blocks")
+    private val waterEsp by BooleanSetting("Water ESP", false, desc = "Highlights water blocks")
+    private val espRange by NumberSetting("ESP Range", 32, 8, 128, 1, unit = "m", desc = "Range for lava and water ESP")
     private val renderStyle by SelectorSetting("Render Style", "Outline", listOf("Filled", "Outline", "Filled Outline"), desc = "Style of the box.")
     private val renderText by BooleanSetting("Render Text", true, desc = "Renders 3D text labels at waypoints")
     private val sendCoordsInChat by BooleanSetting("Send Coords in Chat", true, desc = "Sends coordinates to chat when found")
@@ -43,6 +47,8 @@ object WorldScanner : Module(
     data class WaypointData(val pos: BlockPos, val category: Int, val color: Color)
 
     private val scannedChunks = HashSet<Long>()
+    private val lavaBlocks = ConcurrentHashMap.newKeySet<Long>()
+    private val waterBlocks = ConcurrentHashMap.newKeySet<Long>()
 
     private enum class Quarter {
         NUCLEUS, JUNGLE, PRECURSOR, GOBLIN, MITHRIL, MAGMA, ANY;
@@ -118,15 +124,38 @@ object WorldScanner : Module(
 
                 renderWaypoint(name, data.pos, data.color)
             }
+
+            if (lavaEsp || waterEsp) {
+                val playerPos = mc.player?.position() ?: return@on
+                val rangeSq = espRange * espRange
+                val localMutablePos = BlockPos.MutableBlockPos()
+
+                if (lavaEsp) {
+                    lavaBlocks.forEach { packed ->
+                        localMutablePos.set(packed)
+                        if (localMutablePos.distToCenterSqr(playerPos) <= rangeSq) {
+                            renderWaypoint("Lava", localMutablePos, Colors.MINECRAFT_GOLD, false)
+                        }
+                    }
+                }
+                if (waterEsp) {
+                    waterBlocks.forEach { packed ->
+                        localMutablePos.set(packed)
+                        if (localMutablePos.distToCenterSqr(playerPos) <= rangeSq) {
+                            renderWaypoint("Water", localMutablePos, Colors.MINECRAFT_AQUA, false)
+                        }
+                    }
+                }
+            }
         }
     }
 
-    private fun RenderEvent.Extract.renderWaypoint(name: String, pos: BlockPos, color: Color) {
+    private fun RenderEvent.Extract.renderWaypoint(name: String, pos: BlockPos, color: Color, showText: Boolean = true) {
         val centerPos = Vec3.atCenterOf(pos)
         val aabb = AABB.unitCubeFromLowerCorner(Vec3.atLowerCornerOf(pos))
         drawStyledBox(aabb, color, renderStyle, false)
         
-        if (renderText) {
+        if (renderText && showText) {
             val distance = mc.player?.distanceToSqr(centerPos) ?: 1.0
             val distMeters = kotlin.math.sqrt(distance)
             val scale = (distMeters / 10.0).coerceAtLeast(1.0).toFloat()
@@ -138,6 +167,8 @@ object WorldScanner : Module(
     private fun clearWaypoints() {
         waypoints.clear()
         scannedChunks.clear()
+        lavaBlocks.clear()
+        waterBlocks.clear()
     }
 
 
@@ -193,6 +224,9 @@ object WorldScanner : Module(
                             }
                         }
                         Blocks.LAVA -> {
+                            if (lavaEsp && getBlockState(chunk, x, y + 1, z).isAir) {
+                                lavaBlocks.add(mutablePos.set(worldX, y, worldZ).asLong())
+                            }
                             if (scanCrystals && !waypoints.containsKey("Bal") && Quarter.MAGMA.test(worldX, y, worldZ)) {
                                 if (checkSequence(chunk, x, y, z, Structure.BAL.blocks)) addWaypoint(Structure.BAL, mutablePos.set(worldX, y, worldZ))
                             }
@@ -200,6 +234,11 @@ object WorldScanner : Module(
                                 if (getBlockState(chunk, x, y + 1, z).isAir) {
                                     addWaypointDirect("Worm Fishing", mutablePos.set(worldX, y, worldZ), Colors.MINECRAFT_GOLD, 4)
                                 }
+                            }
+                        }
+                        Blocks.WATER -> {
+                            if (waterEsp && getBlockState(chunk, x, y + 1, z).isAir) {
+                                waterBlocks.add(mutablePos.set(worldX, y, worldZ).asLong())
                             }
                         }
                         Blocks.SMOOTH_STONE_SLAB -> {
