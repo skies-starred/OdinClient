@@ -8,6 +8,7 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.events.core.onSend
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.itemId
+import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.skyblock.LocationUtils
 import net.minecraft.core.BlockPos
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket
@@ -22,6 +23,7 @@ object GhostBlock : Module(
     description = "Turns blocks you look at into ghost blocks.",
     category = Skit.CHEATS
 ) {
+    private val UAYOR by BooleanSetting("Use at your own risk", desc = "This feature can get you banned if used improperly.")
     private val stonkGhostBlock by BooleanSetting("Stonk Ghost Block", true, desc = "Creates a ghost block when right-clicking with a pickaxe.")
     private val ghostBlockKey = KeybindSetting("Ghost Block Key", GLFW.GLFW_KEY_UNKNOWN, desc = "Hold this key to create ghost blocks.")
 
@@ -72,6 +74,11 @@ object GhostBlock : Module(
                 }
             }
         }
+    }
+
+    override fun onEnable() {
+        super.onEnable()
+        modMessage("Use \"GhostBlock\" at your own risk! This feature can get you banned if used improperly!")
     }
 
     private fun toAir(pos: BlockPos): Boolean {
