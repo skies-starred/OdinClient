@@ -12,6 +12,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.inventory.ClickType
 import net.minecraft.world.item.Items
 import starred.skies.odin.utils.Skit
+import starred.skies.odin.utils.guiClick
 import java.util.concurrent.ConcurrentHashMap
 
 object AutoExperiments : Module (
@@ -51,7 +52,7 @@ object AutoExperiments : Module (
             if (now - lastClick < delay()) return@on
 
             handler.nextClick()?.let { slotId ->
-                mc.gameMode?.handleInventoryMouseClick(screen.menu.containerId, slotId, 0, ClickType.CLONE, mc.player)
+                guiClick(screen.menu.containerId, slotId, clickType = ClickType.CLONE)
                 lastClick = now
             }
 
