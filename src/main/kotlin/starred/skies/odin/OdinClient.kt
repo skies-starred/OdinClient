@@ -34,7 +34,7 @@ object OdinClient : ClientModInitializer {
         CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear, TriggerBot,
         Highlight, AutoClicker, Gloomlock, EscrowFix, AutoGFS, QueueTerms, AutoTerms, Trajectories, AutoSell, SimonSays, InventoryWalk,
         FarmKeys, AutoExperiments, EtherwarpHelper, GhostBlock, DoorESP, CancelInteract, WorldScanner, AutoDojo, CheaterWardrobe,
-        CameraHelper, ModSettings
+        CameraHelper, ModSettings, AutoSuperboom
     )
 
     private val mainFile: Scribble = Scribble("main")
