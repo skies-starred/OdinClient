@@ -14,7 +14,6 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.Color
 import com.odtheking.odin.utils.Colors
-import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.render.drawFilledBox
 import com.odtheking.odin.utils.render.drawWireFrameBox
