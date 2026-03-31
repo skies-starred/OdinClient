@@ -2,9 +2,7 @@ package starred.skies.odin.features.impl.cheats
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
-import com.odtheking.odin.events.GuiEvent
-import com.odtheking.odin.events.ScreenEvent
-import com.odtheking.odin.events.TickEvent
+import com.odtheking.odin.events.*
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.hasGlint
@@ -31,7 +29,8 @@ object AutoExperiments : Module (
     private var lastClick: Long = 0
 
     init {
-        on<ScreenEvent.Open> {
+        //~ if >=1.21.11 'GuiEvent' -> 'ScreenEvent'
+        on<GuiEvent.Open> {
             val title = screen.title?.string ?: return@on
 
             handler = when {

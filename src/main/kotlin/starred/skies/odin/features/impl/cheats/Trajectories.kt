@@ -18,7 +18,7 @@ import com.odtheking.odin.utils.renderPos
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.decoration.ArmorStand
-import net.minecraft.world.entity.projectile.arrow.AbstractArrow
+import net.minecraft.world.entity.projectile/*? >= 1.21.11 {*//*.arrow*//*? }*/.AbstractArrow
 import net.minecraft.world.item.BowItem
 import net.minecraft.world.item.EnderpearlItem
 import net.minecraft.world.level.ClipContext

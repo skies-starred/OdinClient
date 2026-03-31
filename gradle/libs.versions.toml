@@ -10,10 +10,17 @@ commodore = "1.0.1"
 fabric-loader = "0.18.5"
 fabric-language-kotlin = "1.13.10+kotlin.2.3.20"
 
+fabric-api-1-21-10 = "0.138.3+1.21.10"
 fabric-api-1-21-11 = "0.141.3+1.21.11"
+
+odin-act-1-21-10 = "e2cf40d9aa"
+odin-prod-1-21-10 = "b1wkliTK"
 
 odin-act-1-21-11 = "e2cf40d9aa"
 odin-prod-1-21-11 = "Rpxp00NX"
+
+firmament-1-21-10 = "43.0.0+mc1.21.10"
+parchment-1-21-10 = "2025.10.12"
 
 firmament-1-21-11 = "44.0.0+mc1.21.11"
 parchment-1-21-11 = "2025.12.20"
@@ -30,13 +37,19 @@ fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", versi
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
 commodore = { module = "com.github.stivais:Commodore", version.ref = "commodore" }
 
+fabric-api-1-21-10 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-10" }
 fabric-api-1-21-11 = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api-1-21-11" }
+
+odin-act-1-21-10 = { module = "maven.modrinth:odin", version.ref = "odin-act-1-21-10" }
+odin-prod-1-21-10 = { module = "maven.modrinth:odin", version.ref = "odin-prod-1-21-10" }
 
 odin-act-1-21-11 = { module = "maven.modrinth:odin", version.ref = "odin-act-1-21-11" }
 odin-prod-1-21-11 = { module = "maven.modrinth:odin", version.ref = "odin-prod-1-21-11" }
 
+firmament-1-21-10 = { module = "maven.modrinth:firmament", version.ref = "firmament-1-21-10" }
 firmament-1-21-11 = { module = "maven.modrinth:firmament", version.ref = "firmament-1-21-11" }
 
+parchment-1-21-10 = { module = "org.parchmentmc.data:parchment-1.21.10", version.ref = "parchment-1-21-10" }
 parchment-1-21-11 = { module = "org.parchmentmc.data:parchment-1.21.11", version.ref = "parchment-1-21-11" }
 
 # needed by odin to work properly in dev env as we use modrinth which doesn't provide the transitive dependencies
