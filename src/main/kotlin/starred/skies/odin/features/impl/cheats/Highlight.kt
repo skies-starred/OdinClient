@@ -73,7 +73,7 @@ object Highlight : Module(
             for (stand in world.entitiesForRendering()) {
                 if (stand !is ArmorStand || !stand.isAlive) continue
 
-                val rawName = stand.displayName.string.noControlCodes.takeIf { !it.equals("armor stand", true)} ?: continue
+                val rawName = stand.displayName?.string?.noControlCodes?.takeIf { !it.equals("armor stand", true)} ?: continue
                 val nameLower = rawName.lowercase()
 
                 if (bool && dungeonMobSpawns.any(rawName::contains)) {
