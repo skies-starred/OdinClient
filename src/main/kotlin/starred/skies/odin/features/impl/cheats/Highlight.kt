@@ -39,6 +39,7 @@ object Highlight : Module(
     val color by ColorSetting("Highlight color", Colors.WHITE, true, desc = "The color of the highlight.")
     private val renderStyle by SelectorSetting("Render Style", "Outline", listOf("Filled", "Outline", "Filled Outline"), desc = "Style of the box.")
     private val boxLineWidth by NumberSetting("Box Line Width", 2f, 0.5f, 10f, 0.5f, desc = "Width of the box outline.")
+    private val enableTracer by BooleanSetting("Enable Tracer", true, desc = "Show tracer lines to highlighted entities.")
     private val tracerLineWidth by NumberSetting("Tracer Line Width", 3f, 0.5f, 10f, 0.5f, desc = "Width of the tracer line.")
     private val hideNonNames by BooleanSetting("Hide non-starred names", true, desc = "Hides names of entities that are not starred.")
 
@@ -126,8 +127,10 @@ object Highlight : Module(
                 drawCustomStyledBox(entity.renderBoundingBox, entityColor, style, depth, lineWidth)
             }
 
-            lineEntities.forEach { (entity, entityColor) ->
-                drawTracer(entity.position().add(0.0, entity.eyeHeight.toDouble(), 0.0), entityColor, tracerWidth, depth)
+            if (enableTracer) {
+                lineEntities.forEach { (entity, entityColor) ->
+                    drawTracer(entity.position().add(0.0, entity.eyeHeight.toDouble(), 0.0), entityColor, tracerWidth, depth)
+                }
             }
         }
 
