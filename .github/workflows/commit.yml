@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Notify
         env:
-          TOKEN: ${{ secrets.TOKEN }}
+          NOTIFY_TOKEN: ${{ secrets.NOTIFY_TOKEN }}
           COMMITS: ${{ toJson(github.event.commits) }}
           REPO: ${{ github.repository }}
         run: |
@@ -16,7 +16,7 @@ jobs:
             --arg repo "$REPO" \
             --argjson commits "$COMMITS" \
             '{repo: $repo, commits: $commits}' \
-          | curl -X POST https://api.aerii.xyz/ping/commit \
+          | curl -X POST "https://builds.aerii.xyz/notify?type=commit" \
             -H "Content-Type: application/json" \
-            -H "Authorization: $TOKEN" \
+            -H "Authorization: $NOTIFY_TOKEN" \
             -d @-
