@@ -19,6 +19,7 @@ import starred.skies.odin.commands.autoClickerCommand
 import starred.skies.odin.commands.autoSellCommand
 import starred.skies.odin.commands.highlightCommand
 import starred.skies.odin.commands.streamCommand
+import starred.skies.odin.features.ImportantFeature
 import starred.skies.odin.features.ModSettings
 import starred.skies.odin.features.UpdateNotifier
 import starred.skies.odin.features.impl.cheats.*
@@ -53,7 +54,7 @@ object OdinClient : ClientModInitializer {
 
         ModuleManager.registerModules(moduleConfig, *modulesToRegister)
         EventBus.subscribe(UpdateNotifier)
-        EventBus.subscribe(AutoDojo)
+        EventBus.subscribe(ImportantFeature)
 
         ClientPlayConnectionEvents.JOIN.register { _, _, _ ->
             for (fn in joinListeners.toList()) fn.invoke()
