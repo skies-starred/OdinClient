@@ -78,8 +78,8 @@ object Trajectories : Module(
 
             if (bows && heldItem.item is BowItem) {
                 val l =
-                    if (term) listOf(calculateTrajectory(0f, isPearl = false, term = true), calculateTrajectory(-5f, isPearl = false, term = true), calculateTrajectory(5f, isPearl = false, term = true))
-                    else listOf(calculateTrajectory(0f, isPearl = false, useCharge = true, term = false))
+                    if (term) listOf(calculateTrajectory(0f, isPearl = false), calculateTrajectory(-5f, isPearl = false), calculateTrajectory(5f, isPearl = false))
+                    else listOf(calculateTrajectory(0f, isPearl = false, useCharge = true))
 
                 for ((a, b) in l) {
                     if (lines) drawLine(a, color, depth, width)
@@ -93,7 +93,7 @@ object Trajectories : Module(
             if (pearls && heldItem.item is EnderpearlItem) {
                 if (heldItem.displayName?.string?.contains("Spirit") == true) return@on
 
-                val (a, b) = calculateTrajectory(0f, isPearl = true, term = false)
+                val (a, b) = calculateTrajectory(0f, isPearl = true)
 
                 if (lines) drawLine(a, color, depth, width)
                 if (boxes) drawCollisionBoxes(isPearl = true)
@@ -102,7 +102,7 @@ object Trajectories : Module(
         }
     }
 
-    private fun calculateTrajectory(yawOffset: Float, isPearl: Boolean, useCharge: Boolean = false, term: Boolean): Pair<List<Vec3>, BlockHitResult?> {
+    private fun calculateTrajectory(yawOffset: Float, isPearl: Boolean, useCharge: Boolean = false): Pair<List<Vec3>, BlockHitResult?> {
         val player = mc.player ?: return VEC_NULL
         val level = mc.level ?: return VEC_NULL
 
@@ -112,7 +112,7 @@ object Trajectories : Module(
         var pos = player.renderPos.add(Vec3(x, player.eyeHeight - 0.1, z))
         var prevPos = pos
 
-        val speed = if (isPearl) 1.5 else if (term) 2.0 else pull(useCharge) * 3.0
+        val speed = if (isPearl) 1.5 else pull(useCharge) * 3.0
         var motion = getLook(player.yRot + yawOffset, player.xRot).normalize().scale(speed)
 
         var hitResult = false
