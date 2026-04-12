@@ -59,7 +59,7 @@ object AutoExperiments : Module (
             handler?.onSlotUpdate(this)
         }
 
-        on<TickEvent.End> {
+        on<TickEvent.Start> {
             val handler = handler ?: return@on
             val screen = mc.screen as? AbstractContainerScreen<*> ?: return@on
 
