@@ -9,7 +9,7 @@ commodore = "1.0.1"
 
 fabric-loader = "0.18.5"
 fabric-language-kotlin = "1.13.10+kotlin.2.3.20"
-library = "94cb251c3a"
+library = "2c154c8891"
 
 fabric-api-1-21-10 = "0.138.3+1.21.10"
 fabric-api-1-21-11 = "0.141.3+1.21.11"
