@@ -76,5 +76,7 @@ object OdinClient : ClientModInitializer {
         modMessage("", "")
         modMessage("<hover:<${0xFFC4B5FD.toInt()}>Click to join!><click:url:https://discord.gg/DB5S3DjQVa>Need help or want to suggest features? Click to join the Discord!".parse())
         modMessage(divider, "")
+        modMessage("<hover:<green>Click to open!><click:url:https://aerii.xyz/donate>Want to help support the development for mods like OdinClient? Click here :3".parse(), "")
+        modMessage(divider, "")
     }
 }
