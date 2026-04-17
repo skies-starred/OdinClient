@@ -20,6 +20,7 @@ import starred.skies.odin.utils.leftClick
 import starred.skies.odin.utils.nullableID
 import starred.skies.odin.utils.nullableUUID
 import starred.skies.odin.utils.rightClick
+import xyz.aerii.library.api.bound
 
 object AutoClicker : Module(
     name = "Auto Clicker",
@@ -103,6 +104,7 @@ object AutoClicker : Module(
     }
 
     private fun InputConstants.Key.isPressed(): Boolean {
+        if (!value.bound) return false
         val window = mc.window
         return if (value > 7) InputConstants.isKeyDown(window, value)
         else GLFW.glfwGetMouseButton(window.handle(), value) == GLFW.GLFW_PRESS
