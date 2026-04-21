@@ -14,7 +14,9 @@ import com.odtheking.odin.utils.Colors
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.render.drawStyledBox
 import com.odtheking.odin.utils.renderBoundingBox
+import com.odtheking.odin.utils.renderPos
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import com.odtheking.odin.utils.skyblock.dungeon.M7Phases
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.boss.wither.WitherBoss
 import net.minecraft.world.entity.decoration.ArmorStand
@@ -31,13 +33,15 @@ object Highlight : Module(
 ) {
     private val depthCheck by BooleanSetting("Depth Check", false, desc = "Disable to enable ESP")
     private val highlightStar by BooleanSetting("Highlight Starred Mobs", true, desc = "Highlights starred dungeon mobs.")
+    private val starredTracer by BooleanSetting("Starred mobs tracers", desc = "Draws a tracer to the starred mobs.")
     val color by ColorSetting("Highlight color", Colors.WHITE, true, desc = "The color of the highlight.")
     private val renderStyle by SelectorSetting("Render Style", "Outline", listOf("Filled", "Outline", "Filled Outline"), desc = "Style of the box.")
     private val hideNonNames by BooleanSetting("Hide non-starred names", true, desc = "Hides names of entities that are not starred.")
     private val teammateClassGlow by BooleanSetting("Teammate Class Glow", true, desc = "Highlights dungeon teammates based on their class color.")
     private val highlightWither by BooleanSetting("Highlight Withers", true, desc = "Highlights Necron, Goldor, Storm and Maxor.")
-    val witherColor by ColorSetting("Wither ESP Color", Color(255, 0, 0, 1f), true, desc = "The color of the wither highlight.")
+    private val witherColor by ColorSetting("Wither ESP Color", Color(255, 0, 0, 1f), true, desc = "The color of the wither highlight.")
     private val witherTracer by BooleanSetting("Wither Tracer", true, desc = "Draws a tracer to the wither boss in P3 section 4.")
+    private val customTracer by BooleanSetting("Custom tracer", desc = "Draws a tracer to the mobs added manually")
 
     private val dungeonMobSpawns = hashSetOf("Lurker", "Dreadlord", "Souleater", "Zombie", "Skeleton", "Skeletor", "Sniper", "Super Archer", "Spider", "Fels", "Withermancer", "Lost Adventurer", "Angry Archaeologist", "Frozen Adventurer", "Shadow Assassin")
     private val starredRegex = Regex("^.*✯ .*\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?[kM]?❤$")
@@ -54,16 +58,18 @@ object Highlight : Module(
 
         on<EntityMetadataEvent> {
             if (!DungeonUtils.inDungeons) return@on
-            val entity = entity
+            if (!entity.isAlive) return@on
 
             when {
-                highlightWither && entity is WitherBoss && entity.isAlive && !entity.isRemoved && entity.isPowered -> {
+                highlightWither && entity is WitherBoss && entity.isPowered -> {
                     witherIds.add(entity.id)
                 }
+
                 highlightStar && !DungeonUtils.inBoss && entity is Player && entity != mc.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
                     starredIds.add(entity.id)
                 }
-                (highlightStar || highlightMap.isNotEmpty()) && !DungeonUtils.inBoss && entity is ArmorStand && entity.isAlive && !entity.isRemoved -> {
+
+                (highlightStar || highlightMap.isNotEmpty()) && !DungeonUtils.inBoss && entity is ArmorStand -> {
                     val rawName = entity.displayName?.string?.noControlCodes?.takeIf { !it.equals("armor stand", true) } ?: return@on
                     val nameLower = rawName.lowercase()
 
@@ -87,36 +93,35 @@ object Highlight : Module(
             if (customIds.isEmpty() && starredIds.isEmpty() && witherIds.isEmpty()) return@on
 
             val world = mc.level ?: return@on
+            val bool0 = starredTracer
+            val bool1 = witherTracer && DungeonUtils.getF7Phase() == M7Phases.P3
+            val bool2 = customTracer
 
             starredIds.forEach { id ->
                 val entity = world.getEntity(id) ?: return@forEach
                 drawStyledBox(entity.renderBoundingBox, color, renderStyle, depthCheck)
+
+                if (bool0) {
+                    drawTracer(entity.renderPos, color, depth = depthCheck)
+                }
             }
 
             witherIds.forEach { id ->
                 val entity = world.getEntity(id) ?: return@forEach
                 drawStyledBox(entity.renderBoundingBox, witherColor, renderStyle, depthCheck)
 
-                if (witherTracer) {
-                    val playerPos = mc.player?.position() ?: return@forEach
-                    val minX = minOf(-3, 91).toDouble()
-                    val maxX = maxOf(-3, 91).toDouble()
-                    val minY = minOf(106, 158).toDouble()
-                    val maxY = maxOf(106, 158).toDouble()
-                    val minZ = minOf(30, 50).toDouble()
-                    val maxZ = maxOf(30, 50).toDouble()
-
-                    val inSection4 = playerPos.x in minX..maxX && playerPos.y in minY..maxY && playerPos.z in minZ..maxZ
-
-                    if (inSection4) {
-                        drawTracer(entity.position(), witherColor, depth = depthCheck)
-                    }
+                if (bool1) {
+                    drawTracer(entity.renderPos, witherColor, depth = depthCheck)
                 }
             }
 
             customIds.forEach { (id, color) ->
                 val entity = world.getEntity(id) ?: return@forEach
                 drawStyledBox(entity.renderBoundingBox, color, renderStyle, depthCheck)
+
+                if (bool2) {
+                    drawTracer(entity.renderPos, color, depth = depthCheck)
+                }
             }
         }
 
