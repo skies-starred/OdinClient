@@ -6,7 +6,7 @@ import com.odtheking.odin.utils.modMessage
 import net.minecraft.network.chat.Component
 
 object ImportantFeature {
-    private val set = setOf("516m")
+    private val set = setOf("516m", "evilbers") // donate!
 
     init {
         fn()
