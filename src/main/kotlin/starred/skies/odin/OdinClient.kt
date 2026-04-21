@@ -19,6 +19,7 @@ import starred.skies.odin.features.ImportantFeature
 import starred.skies.odin.features.ModSettings
 import starred.skies.odin.features.UpdateNotifier
 import starred.skies.odin.features.impl.cheats.*
+import starred.skies.odin.features.impl.render.*
 import starred.skies.odin.helpers.Scribble
 import xyz.aerii.library.handlers.parser.parse
 
@@ -31,7 +32,7 @@ object OdinClient : ClientModInitializer {
         CloseChest, DungeonAbilities, FuckDiorite, SecretHitboxes, BreakerHelper, KeyHighlight, LividSolver, SpiritBear, TriggerBot,
         Highlight, AutoClicker, Gloomlock, EscrowFix, AutoGFS, QueueTerms, AutoTerms, Trajectories, AutoSell, SimonSays, InventoryWalk,
         FarmKeys, AutoExperiments, EtherwarpHelper, GhostBlock, DoorESP, CancelInteract, WorldScanner, AutoDojo, CheaterWardrobe,
-        CameraHelper, ModSettings, AutoSuperboom, Ghosts
+        CameraHelper, ModSettings, AutoSuperboom, Ghosts, NoGlow
     )
 
     private val mainFile: Scribble = Scribble("main")

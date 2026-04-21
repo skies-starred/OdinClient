@@ -13,12 +13,13 @@ public abstract class EntityMixin {
     @Inject(method = "getTeamColor", at = @At("HEAD"), cancellable = true)
     public void onGetTeamColor(CallbackInfoReturnable<Integer> cir) {
         Entity self = (Entity)(Object)this;
+
         Integer color = Highlight.getTeammateColor(self);
         if (color != null) cir.setReturnValue(color);
     }
 
     @Inject(method = "isCurrentlyGlowing", at = @At("HEAD"), cancellable = true)
     public void onIsCurrentlyGlowing(CallbackInfoReturnable<Boolean> cir) {
-        if (NoGlow.isEnabled()) cir.setReturnValue(false);
+        if (NoGlow.INSTANCE.getEnabled()) cir.setReturnValue(false);
     }
 }
