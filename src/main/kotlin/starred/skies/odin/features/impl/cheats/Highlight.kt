@@ -34,17 +34,17 @@ object Highlight : Module(
 ) {
     private val depthCheck by BooleanSetting("Depth Check", false, desc = "Disable to enable ESP")
     private val highlightStar by BooleanSetting("Highlight Starred Mobs", true, desc = "Highlights starred dungeon mobs.")
-    private val starredTracer by BooleanSetting("Starred Mobs Tracers", desc = "Draws a tracer to the starred mobs.")
-    val color by ColorSetting("Highlight Color", Colors.WHITE, true, desc = "The color of the highlight.")
+    private val starredTracer by BooleanSetting("Starred mobs tracers", desc = "Draws a tracer to the starred mobs.")
+    val color by ColorSetting("Highlight color", Colors.WHITE, true, desc = "The color of the highlight.")
     private val renderStyle by SelectorSetting("Render Style", "Outline", listOf("Filled", "Outline", "Filled Outline"), desc = "Style of the box.")
-    private val hideNonNames by BooleanSetting("Hide Non-starred Names", true, desc = "Hides names of entities that are not starred.")
+    private val hideNonNames by BooleanSetting("Hide non-starred names", true, desc = "Hides names of entities that are not starred.")
     private val teammateClassGlow by BooleanSetting("Teammate Class Glow", true, desc = "Highlights dungeon teammates based on their class color.")
     private val highlightWither by BooleanSetting("Highlight Withers", true, desc = "Highlights Necron, Goldor, Storm and Maxor.")
     private val witherColor by ColorSetting("Wither ESP Color", Color(255, 0, 0, 1f), true, desc = "The color of the wither highlight.")
     private val witherTracer by BooleanSetting("Wither Tracer", true, desc = "Draws a tracer to the wither boss in P3 section 4.")
     private val highlightBats by BooleanSetting("Highlight Bats", true, desc = "Highlights bats in dungeons.")
-    val batColor by ColorSetting("Bat Color", Color(0, 255, 255, 1f), true, desc = "The color of the bat highlight.")
-    private val customTracer by BooleanSetting("Custom Tracer", desc = "Draws a tracer to the mobs added manually")
+    val batColor by ColorSetting("Bat color", Color(0, 255, 255, 1f), true, desc = "The color of the bat highlight.")
+    private val customTracer by BooleanSetting("Custom tracer", desc = "Draws a tracer to the mobs added manually")
 
     private val dungeonMobSpawns = hashSetOf("Lurker", "Dreadlord", "Souleater", "Zombie", "Skeleton", "Skeletor", "Sniper", "Super Archer", "Spider", "Fels", "Withermancer", "Lost Adventurer", "Angry Archaeologist", "Frozen Adventurer", "Shadow Assassin")
     private val starredRegex = Regex("^.*✯ .*\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?[kM]?❤$")
@@ -63,14 +63,13 @@ object Highlight : Module(
         on<EntityMetadataEvent> {
             if (!DungeonUtils.inDungeons) return@on
             if (!entity.isAlive) return@on
-            if (DungeonUtils.inBoss) return@on
 
             when {
                 highlightWither && entity is WitherBoss && entity.isPowered -> {
                     witherIds.add(entity.id)
                 }
 
-                highlightBats && entity is Bat && !entity.isPassenger && !entity.isInvisible -> {
+                !DungeonUtils.inBoss && highlightBats && entity is Bat && !entity.isPassenger && !entity.isInvisible -> {
                     val player = mc.player ?: return@on
                     if (player.distanceTo(entity) < 1.0) {
                         spiritSceptreIds.add(entity.id)
@@ -78,11 +77,11 @@ object Highlight : Module(
                     }
                 }
 
-                highlightStar && entity is Player && entity != mc.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
+                !DungeonUtils.inBoss && highlightStar && entity is Player && entity != mc.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
                     starredIds.add(entity.id)
                 }
 
-                (highlightStar || highlightMap.isNotEmpty()) && entity is ArmorStand -> {
+                !DungeonUtils.inBoss && (highlightStar || highlightMap.isNotEmpty()) && entity is ArmorStand -> {
                     val rawName = entity.displayName?.string?.noControlCodes?.takeIf { !it.equals("armor stand", true) } ?: return@on
                     val nameLower = rawName.lowercase()
 
