@@ -44,7 +44,7 @@ object Highlight : Module(
     private val witherTracer by BooleanSetting("Wither Tracer", true, desc = "Draws a tracer to the wither boss in P3 section 4.")
     private val highlightBats by BooleanSetting("Highlight Bats", true, desc = "Highlights bats in dungeons.")
     val batColor by ColorSetting("Bat Color", Color(0, 255, 255, 1f), true, desc = "The color of the bat highlight.")
-    private val customTracer by BooleanSetting("Custom Cracer", desc = "Draws a tracer to the mobs added manually")
+    private val customTracer by BooleanSetting("Custom Tracer", desc = "Draws a tracer to the mobs added manually")
 
     private val dungeonMobSpawns = hashSetOf("Lurker", "Dreadlord", "Souleater", "Zombie", "Skeleton", "Skeletor", "Sniper", "Super Archer", "Spider", "Fels", "Withermancer", "Lost Adventurer", "Angry Archaeologist", "Frozen Adventurer", "Shadow Assassin")
     private val starredRegex = Regex("^.*✯ .*\\d{1,3}(?:,\\d{3})*(?:\\.\\d+)?[kM]?❤$")
