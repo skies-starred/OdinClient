@@ -52,8 +52,6 @@ object CroesusParser {
 
     /** "Open Reward Chest" in the buy-confirm screen. */
     const val BUY_CONFIRM_SLOT: Int = 31
-    /** "Go Back" in the buy-confirm screen. */
-    const val BUY_BACK_SLOT: Int = 49
     /** "Go Back" in the run sub-screen. */
     const val RUN_BACK_SLOT: Int = 30
 
@@ -68,18 +66,6 @@ object CroesusParser {
     fun inBuyConfirmMenu(screen: Screen?): Boolean =
         screen is AbstractContainerScreen<*> &&
             BUY_CONFIRM_TITLE_REGEX.matches(screen.title.string.trim())
-
-    /** Parse the chest currently displayed in the buy-confirm screen.
-     *  Returns null when [title] isn't a recognised tier. */
-    fun parseBuyConfirmChest(menu: AbstractContainerMenu, title: String): ChestParseResult? {
-        val tierName = title.trim()
-        val colourCode = TIER_COLOUR_CODE[tierName] ?: return null
-        val lorePlain = lorePlain(menu, BUY_CONFIRM_SLOT)
-            ?: return ChestParseResult.Failure(tierName, "buy-confirm slot $BUY_CONFIRM_SLOT empty")
-        val loreFormatted = loreFormatted(menu, BUY_CONFIRM_SLOT)
-            ?: return ChestParseResult.Failure(tierName, "buy-confirm slot $BUY_CONFIRM_SLOT empty")
-        return parseChestLore(BUY_CONFIRM_SLOT, tierName, colourCode, lorePlain, loreFormatted)
-    }
 
     // -- Run-selection screen ---------------------------------------------------
 
@@ -248,7 +234,7 @@ object CroesusParser {
     // -- Helpers ----------------------------------------------------------------
 
     /** Lore lines with § codes preserved (needed for ultimate-book detection). */
-    fun loreFormatted(menu: AbstractContainerMenu, slotIndex: Int): List<String>? {
+    private fun loreFormatted(menu: AbstractContainerMenu, slotIndex: Int): List<String>? {
         val stack = menu.slots.getOrNull(slotIndex)?.item ?: return null
         if (stack.isEmpty) return null
         val lines = stack.lore.takeIf { it.isNotEmpty() } ?: return null
@@ -256,7 +242,7 @@ object CroesusParser {
     }
 
     /** Lore lines with all formatting stripped. */
-    fun lorePlain(menu: AbstractContainerMenu, slotIndex: Int): List<String>? {
+    private fun lorePlain(menu: AbstractContainerMenu, slotIndex: Int): List<String>? {
         val stack = menu.slots.getOrNull(slotIndex)?.item ?: return null
         if (stack.isEmpty) return null
         return stack.loreString.takeIf { it.isNotEmpty() }

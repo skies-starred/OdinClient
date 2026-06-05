@@ -42,13 +42,12 @@ object PriceClient {
     private val nameToId   = ConcurrentHashMap<String, String>()
 
     @Volatile private var lastRefreshedAt = 0L
-    @Volatile var lastError: String? = null; private set
+    @Volatile private var lastError: String? = null
     private val refreshMutex = Mutex()
 
-    val ageMs: Long get() = if (lastRefreshedAt == 0L) Long.MAX_VALUE else System.currentTimeMillis() - lastRefreshedAt
+    private val ageMs: Long get() = if (lastRefreshedAt == 0L) Long.MAX_VALUE else System.currentTimeMillis() - lastRefreshedAt
 
     fun getBazaarSell(itemId: String): Double? = bazaarSell[itemId]
-    fun getBazaarBuy(itemId: String): Double? = bazaarBuy[itemId]
     fun getLowestBin(itemId: String): Double? = lowestBin[itemId]
 
     fun resolveItemId(displayName: String): String? =

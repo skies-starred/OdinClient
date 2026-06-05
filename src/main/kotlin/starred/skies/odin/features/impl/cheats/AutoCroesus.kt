@@ -263,12 +263,7 @@ object AutoCroesus : Module(
             resetCycle()
             return
         }
-        val container = screen as AbstractContainerScreen<*>
-        if (!clickSlotIn(container, CroesusParser.BUY_CONFIRM_SLOT)) {
-            modMessage("§cAutoCroesus: buy-confirm opened but click failed.")
-            resetCycle()
-            return
-        }
+        clickSlotIn(screen as AbstractContainerScreen<*>, CroesusParser.BUY_CONFIRM_SLOT)
         multiRunChestsThisCycle++
         modMessage("§a✓ AutoCroesus: bought §r${pendingTier}§a chest.")
         if (multiRunActive) {
@@ -325,11 +320,7 @@ object AutoCroesus : Module(
             modMessage("§cAutoCroesus: no screen to click Go Back on.")
             resetCycle(); return
         }
-        if (!clickSlotIn(screen, CroesusParser.RUN_BACK_SLOT)) {
-            modMessage("§cAutoCroesus: failed to click Go Back.")
-            resetCycle()
-            return
-        }
+        clickSlotIn(screen, CroesusParser.RUN_BACK_SLOT)
         claimState = ClaimState.AWAIT_CROESUS_LIST
         claimDeadlineTick = monotonicTick + (CLAIM_TIMEOUT_TICKS * 2).toLong()
     }
@@ -382,26 +373,23 @@ object AutoCroesus : Module(
         claimDeadlineTick = monotonicTick + (CLAIM_TIMEOUT_TICKS * 2).toLong()
     }
 
-    private fun clickUnclaimedRun(slot: Int): Boolean {
-        val screen = mc.screen as? AbstractContainerScreen<*> ?: return false
-        if (!clickSlotIn(screen, slot)) {
-            modMessage("§cAutoCroesus: failed to click run slot $slot.")
-            resetCycle()
-            return false
-        }
+    private fun clickUnclaimedRun(slot: Int) {
+        val screen = mc.screen as? AbstractContainerScreen<*> ?: return
+        clickSlotIn(screen, slot)
         multiRunRunsThisCycle++
         claimState = ClaimState.AWAIT_RUN_SCREEN
         claimDeadlineTick = monotonicTick + (CLAIM_TIMEOUT_TICKS * 2).toLong()
-        return true
     }
 
+    /** Returns true if a "Next Page" click was sent (so the caller knows the
+     *  Croesus list isn't actually exhausted yet). */
     private fun tryAdvancePage(screen: AbstractContainerScreen<*>): Boolean {
         if (pagesVisitedThisCycle >= MAX_PAGES_PER_CYCLE) return false
         val stack = screen.menu.slots.getOrNull(53)?.item ?: return false
         if (stack.isEmpty) return false
         val name = stack.hoverName.string
         if (!name.contains("Next Page", ignoreCase = true)) return false
-        if (!clickSlotIn(screen, 53)) return false
+        clickSlotIn(screen, 53)
         pagesVisitedThisCycle++
         modMessage("§7AutoCroesus: page exhausted, advancing to page §f${pagesVisitedThisCycle + 1}§7…")
         return true
@@ -447,10 +435,7 @@ object AutoCroesus : Module(
             }
             return
         }
-        if (!clickSlotIn(screen, best.slot)) {
-            modMessage("§cAutoCroesus: click failed.")
-            return
-        }
+        clickSlotIn(screen, best.slot)
         claimState = ClaimState.AWAIT_CONFIRM
         claimDeadlineTick = monotonicTick + CLAIM_TIMEOUT_TICKS.toLong()
         pendingTier = "${best.tierColourCode}${best.tierName}"
@@ -459,13 +444,15 @@ object AutoCroesus : Module(
         )
     }
 
-    // -- Rendering -------------------------------------------------------------
-
+    /** Drop the parser cache when the container changes — stale data from the
+     *  previous run would otherwise leak into the next overlay. */
     private fun reset() {
         lastChests = emptyList()
         cachedContainerId = -1
         ticksSinceParse = 0
     }
+
+    // -- Rendering -------------------------------------------------------------
 
     private fun drawSlotOutline(ctx: GuiGraphics, x: Int, y: Int, colour: Int, bw: Int) {
         ctx.fill(x - bw, y - bw, x + 16 + bw, y, colour)
@@ -519,9 +506,7 @@ object AutoCroesus : Module(
         }
     }
 
-    private fun clickSlotIn(screen: AbstractContainerScreen<*>, slot: Int): Boolean {
-        val containerId = screen.menu.containerId
-        guiClick(containerId, slot)
-        return true
+    private fun clickSlotIn(screen: AbstractContainerScreen<*>, slot: Int) {
+        guiClick(screen.menu.containerId, slot)
     }
 }
