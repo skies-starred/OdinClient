@@ -36,7 +36,7 @@ package foo.starred.odinclient.features.impl.dungeons
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.ColorSetting
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.ChatMessageEvent
 import com.odtheking.odin.events.LevelEvent
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.core.on
@@ -85,7 +85,7 @@ object DoorHighlight : Module(
         get() = enabled && depthCheck
 
     init {
-        on<ChatPacketEvent> {
+        on<ChatMessageEvent> {
             if (!DungeonUtils.inClear) return@on
             when {
                 witherKeyObtainRegex.matches(value) || witherKeyPickedUpRegex.matches(value) -> witherKeys++

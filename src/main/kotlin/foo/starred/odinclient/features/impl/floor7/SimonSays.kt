@@ -3,7 +3,7 @@ package foo.starred.odinclient.features.impl.floor7
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.ChatMessageEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
@@ -28,7 +28,7 @@ object SimonSays : Module(
     private var active = false
 
     init {
-        on<ChatPacketEvent> {
+        on<ChatMessageEvent> {
             if (value == "[BOSS] Goldor: Who dares trespass into my domain?") s()
         }
 

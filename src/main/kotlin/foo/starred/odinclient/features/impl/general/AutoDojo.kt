@@ -3,7 +3,7 @@ package foo.starred.odinclient.features.impl.general
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.clickgui.settings.impl.SelectorSetting
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.ChatMessageEvent
 import com.odtheking.odin.events.RenderEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
@@ -71,7 +71,7 @@ object AutoDojo : Module(
     )
 
     init {
-        on<ChatPacketEvent> {
+        on<ChatMessageEvent> {
             val text = value.lowercase()
 
             if ("rank:" in text) {

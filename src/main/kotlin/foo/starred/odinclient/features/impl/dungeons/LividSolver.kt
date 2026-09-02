@@ -80,7 +80,7 @@ object LividSolver : Module(
     private val lividStartRegex = Regex("^\\[BOSS] Livid: Welcome, you've arrived right on time\\. I am Livid, the Master of Shadows\\.$")
 
     init {
-        on<ChatPacketEvent> {
+        on<ChatMessageEvent> {
             if (!DungeonUtils.inDungeons || !DungeonUtils.isFloor(5)) return@on
             if (value.matches(lividStartRegex)) invulnTime = 390
         }

@@ -36,7 +36,7 @@ package foo.starred.odinclient.features.impl.dungeons
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.ChatMessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.handlers.schedule
@@ -57,7 +57,7 @@ object AutoAbilities : Module(
     }
 
     init {
-        on<ChatPacketEvent> {
+        on<ChatMessageEvent> {
             if (!autoUlt) return@on
 
             val delay = when (value) {

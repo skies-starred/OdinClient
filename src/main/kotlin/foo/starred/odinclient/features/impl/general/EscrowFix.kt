@@ -34,7 +34,7 @@
 
 package foo.starred.odinclient.features.impl.general
 
-import com.odtheking.odin.events.ChatPacketEvent
+import com.odtheking.odin.events.ChatMessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.sendCommand
@@ -55,7 +55,7 @@ object EscrowFix : Module(
     private val regex = Regex("Escrow refunded (\\d+) coins for Bazaar Instant Buy Submit!")
 
     init {
-        on<ChatPacketEvent> {
+        on<ChatMessageEvent> {
             val command = messages[value] ?: if (value.matches(regex)) "bz" else null
             command?.let { sendCommand(it) }
         }

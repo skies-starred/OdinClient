@@ -2,8 +2,8 @@ package foo.starred.odinclient.features.impl.general
 
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
-import com.odtheking.odin.events.GuiEvent
 import com.odtheking.odin.events.ScreenEvent
+import com.odtheking.odin.events.SetSlotEvent
 import com.odtheking.odin.events.TickEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
@@ -55,7 +55,7 @@ object AutoExperiments : Module(
             cancel()
         }
 
-        on<GuiEvent.SlotUpdate> {
+        on<SetSlotEvent> {
             handler?.onSlotUpdate(this)
         }
 
@@ -83,7 +83,7 @@ object AutoExperiments : Module(
         private var lastAddedSlot = -1
         private var close = false
 
-        override fun onSlotUpdate(event: GuiEvent.SlotUpdate) {
+        override fun onSlotUpdate(event: SetSlotEvent) {
             val slots = event.menu.slots
             val center = slots[49].item
 
@@ -121,7 +121,7 @@ object AutoExperiments : Module(
     private class UltrasequencerHandler : ExperimentHandler() {
         private val order = ConcurrentHashMap<Int, Int>()
 
-        override fun onSlotUpdate(event: GuiEvent.SlotUpdate) {
+        override fun onSlotUpdate(event: SetSlotEvent) {
             val slots = event.menu.slots
             val center = slots[49].item
 
@@ -151,7 +151,7 @@ object AutoExperiments : Module(
         protected var clicks = 0
         protected var hasData = false
 
-        abstract fun onSlotUpdate(event: GuiEvent.SlotUpdate)
+        abstract fun onSlotUpdate(event: SetSlotEvent)
 
         abstract fun nextClick(): Int?
 
