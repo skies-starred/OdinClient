@@ -97,13 +97,15 @@ object Highlight : Module(
         on<EntityMetadataEvent> {
             if (!entity.isAlive) return@on
             val d = DungeonUtils.inDungeons
+            val b = DungeonUtils.inBoss
+            val p = DungeonUtils.getF7Phase()
 
             when {
-                d && highlightWither && entity is WitherBoss && entity.isPowered -> {
+                d && p != M7Phases.P5 && highlightWither && entity is WitherBoss && !entity.isInvisible && entity.invulnerableTicks != 800 -> {
                     witherIds.add(entity.id)
                 }
 
-                d && !DungeonUtils.inBoss && highlightBats && entity is Bat && !entity.isPassenger && !entity.isInvisible -> {
+                d && !b && highlightBats && entity is Bat && !entity.isPassenger && !entity.isInvisible -> {
                     val player = mc.player ?: return@on
                     if (player.distanceTo(entity) < 1.0) {
                         spiritSceptreIds.add(entity.id)
@@ -111,11 +113,11 @@ object Highlight : Module(
                     }
                 }
 
-                d && !DungeonUtils.inBoss && highlightStar && entity is Player && entity != mc.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
+                d && !b && highlightStar && entity is Player && entity != mc.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
                     starredIds.add(entity.id)
                 }
 
-                !DungeonUtils.inBoss && (highlightStar || highlightMap.isNotEmpty()) && entity is ArmorStand -> {
+                !b && (highlightStar || highlightMap.isNotEmpty()) && entity is ArmorStand -> {
                     val rawName = entity.customName?.string?.noControlCodes ?: return@on
                     val nameLower = rawName.lowercase()
 
@@ -151,9 +153,10 @@ object Highlight : Module(
             }
 
             witherIds.forEach { id ->
-                val entity = world.getEntity(id) ?: return@forEach
+                val entity = world.getEntity(id) as? WitherBoss ?: return@forEach
                 if (!entity.isAlive) return@forEach
                 drawStyledBox(entity.renderBoundingBox, witherColor, renderStyle, depthCheck)
+                if (entity.invulnerableTicks == 0) return@forEach
                 if (bool1) drawTracer(entity.renderPos, witherColor, depth = depthCheck)
             }
 
