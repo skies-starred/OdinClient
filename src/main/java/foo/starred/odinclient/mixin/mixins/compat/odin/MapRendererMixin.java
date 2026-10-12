@@ -26,6 +26,7 @@ public class MapRendererMixin {
         return odinClient$darken(color, CheaterMap.INSTANCE.getDarkenFactor());
     }
 
+    //~ if >= 26.2 'getWalkedInto' -> 'getShouldShowName'
     @ModifyExpressionValue(method = "renderRoomText", at = @At(value = "INVOKE", target = "Lcom/odtheking/odin/features/impl/dungeon/map/tile/DungeonRoom;getWalkedInto()Z"))
     private static boolean odinClient$renderRoomText(boolean original) {
         if (!CheaterMap.getShowRooms()) return original;
