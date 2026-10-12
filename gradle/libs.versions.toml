@@ -10,7 +10,7 @@ fabric-language-kotlin = "1.13.13+kotlin.2.4.10"
 
 kbus = "2026.09.3"
 kommand = "2026.09.2"
-snowbird = "2026.10.1"
+snowbird = "2026.10.2"
 cascade = "2026.10.1"
 updater = "2026.10.1"
 
