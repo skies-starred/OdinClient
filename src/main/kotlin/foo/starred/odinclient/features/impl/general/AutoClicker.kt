@@ -1,6 +1,7 @@
 package foo.starred.odinclient.features.impl.general
 
 import com.mojang.serialization.Codec
+//~ if >= 26.2 'Setting' -> 'RenderableSetting'
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting

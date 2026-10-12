@@ -1,5 +1,6 @@
 package foo.starred.odinclient.features.impl.floor7
 
+//~ if >= 26.2 'Setting' -> 'RenderableSetting'
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
