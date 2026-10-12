@@ -1,5 +1,5 @@
 [versions]
 id = "odin-client"
 name = "OdinClient"
-version = "0.3.6-r1"
+version = "0.3.6-r2"
 group = "foo.starred"

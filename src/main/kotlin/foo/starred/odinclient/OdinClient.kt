@@ -36,7 +36,7 @@ object OdinClient : ClientModInitializer {
     private var last: String by main.string("lastInstall")
     private var send: Boolean = true
 
-    val version: String = /*$ mod_version*/ "0.3.6-r1"
+    val version: String = /*$ mod_version*/ "0.3.6-r2"
     val config: ModuleConfig = ModuleConfig("odinClient")
 
     @JvmField
