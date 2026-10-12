@@ -4,10 +4,15 @@ kotlin = "2.4.10"
 
 devauth = "1.2.2"
 commodore = "1.0.1"
-kommand = "1.0.2"
 
 fabric-loader = "0.19.3"
 fabric-language-kotlin = "1.13.13+kotlin.2.4.10"
+
+kbus = "2026.09.3"
+kommand = "2026.09.2"
+snowbird = "2026.10.1"
+cascade = "2026.10.1"
+updater = "2026.10.1"
 
 lwjgl-nanovg = "3.4.1"
 
@@ -16,10 +21,15 @@ fabric-loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric-l
 fabric-language-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = "fabric-language-kotlin" }
 
 devauth = { module = "me.djtheredstoner:DevAuth-fabric", version.ref = "devauth" }
-kommand = { module = "foo.starred:kommand", version.ref = "kommand" }
 
 commodore = { module = "com.github.stivais:Commodore", version.ref = "commodore" }
 lwjgl-nanovg = { module = "org.lwjgl:lwjgl-nanovg", version.ref = "lwjgl-nanovg" }
+
+kbus = { module = "foo.starred:kbus", version.ref = "kbus" }
+kommand = { module = "foo.starred:kommand", version.ref = "kommand" }
+cascade = { module = "foo.starred:cascade", version.ref = "cascade" }
+snowbird = { module = "foo.starred:snowbird", version.ref = "snowbird" }
+updater = { module = "foo.starred:updater", version.ref = "updater" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }

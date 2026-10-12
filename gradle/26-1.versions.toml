@@ -4,15 +4,9 @@ compatibility = "26.1.x"
 fabric-api = "0.155.2+26.1.2"
 
 odin = "7FcnBdo7"
-snowbird = "024+26.1"
-cascade = "041+26.1"
-updater = "1.0.9+26.1"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric-api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric-api" }
 
 odin = { module = "maven.modrinth:odin", version.ref = "odin" }
-snowbird = { module = "foo.starred:snowbird", version.ref = "snowbird" }
-cascade = { module = "foo.starred:cascade", version.ref = "cascade" }
-updater = { module = "foo.starred:updater", version.ref = "updater" }
