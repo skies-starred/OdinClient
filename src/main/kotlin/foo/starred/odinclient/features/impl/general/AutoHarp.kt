@@ -5,11 +5,9 @@ import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.events.core.onSend
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
-import foo.starred.odinclient.utils.guiClick
-import foo.starred.snowbird.api.client
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.protocol.game.ClientboundContainerClosePacket
 import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket
 import net.minecraft.network.protocol.game.ServerboundContainerClosePacket
@@ -45,7 +43,7 @@ object AutoHarp : Module(
         on<TickStartEvent> {
             if (!bool) return@on
 
-            val screen = client.screen as? AbstractContainerScreen<*> ?: return@on
+            val screen = MinecraftGui.container ?: return@on
             val slots = screen.menu.slots
 
             var hash0 = 0
@@ -61,7 +59,7 @@ object AutoHarp : Module(
             hash = hash0
 
             if (slot == -1) return@on
-            guiClick(screen.menu.containerId, slot, clickType = ContainerInput.CLONE)
+            MinecraftGui.click(screen.menu.containerId, slot, clickType = ContainerInput.CLONE)
         }
     }
 }

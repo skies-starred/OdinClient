@@ -14,9 +14,6 @@ stonecutter parameters {
     swaps["minecraft"] = "\"${node.metadata.version}\""
 
     replacements {
-        string(current.parsed >= "26.2") {
-            replace("client.screen", "client.gui.screen()")
-        }
     }
 }
 

@@ -7,10 +7,11 @@ import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.MessageEvent
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.rightClick
-import foo.starred.snowbird.api.client
 import net.minecraft.core.BlockPos
 import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
@@ -38,7 +39,7 @@ object SimonSays : Module(
 
         on<TickStartEvent> {
             if (!active) return@on
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
 
             if (delayTicks > 0) {
                 delayTicks--
@@ -53,7 +54,7 @@ object SimonSays : Module(
     }
 
     private fun s() {
-        val h = mc.hitResult?.takeIf { it.type == HitResult.Type.BLOCK } ?: return
+        val h = client.hitResult?.takeIf { it.type == HitResult.Type.BLOCK } ?: return
         if ((h as? BlockHitResult)?.blockPos != startButton) return
 
         clicksLeft = startClicks

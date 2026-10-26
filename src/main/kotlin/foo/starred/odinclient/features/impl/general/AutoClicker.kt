@@ -1,8 +1,7 @@
 package foo.starred.odinclient.features.impl.general
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.mojang.serialization.Codec
-//~ if >= 26.2 'Setting' -> 'RenderableSetting'
-import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
@@ -11,16 +10,19 @@ import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.getChatBreak
 import com.odtheking.odin.utils.itemId
 import com.odtheking.odin.utils.modMessage
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
+import foo.starred.kontext.abstraction.input.impl.GenericInputState
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.api.storage.JsonStore
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.mixin.accessors.KeyMappingAccessor
 import foo.starred.odinclient.utils.*
-import foo.starred.snowbird.api.client
-import foo.starred.snowbird.api.inputs.impl.GenericInputState
 import net.minecraft.client.KeyMapping
 import net.minecraft.world.phys.BlockHitResult
-import org.lwjgl.glfw.GLFW
+
+//~ if >= 26.2 'Setting' -> 'RenderableSetting'
+import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
 
 object AutoClicker : Module(
     name = "Auto Clicker",
@@ -40,8 +42,8 @@ object AutoClicker : Module(
     private val leftCps by NumberSetting("Left Clicks Per Second", 5.0f, 3.0, 15.0, .5, desc = "The amount of left clicks per second to perform.").withDependency { !terminatorOnly }
     //~ if >= 26.2 '3.0, 15.0' -> '3.0..15.0'
     private val rightCps by NumberSetting("Right Clicks Per Second", 5.0f, 3.0, 15.0, .5, desc = "The amount of right clicks per second to perform.").withDependency { !terminatorOnly }
-    private val leftClickKeybind = KeybindSetting("Left Click", GLFW.GLFW_KEY_UNKNOWN, desc = "The keybind to hold for the auto clicker to click left click.").withDependency { !terminatorOnly }
-    private val rightClickKeybind = KeybindSetting("Right Click", GLFW.GLFW_KEY_UNKNOWN, desc = "The keybind to hold for the auto clicker to click right click.").withDependency { !terminatorOnly }
+    private val leftClickKeybind = KeybindSetting("Left Click", InputConstants.UNKNOWN.value, desc = "The keybind to hold for the auto clicker to click left click.").withDependency { !terminatorOnly }
+    private val rightClickKeybind = KeybindSetting("Right Click", InputConstants.UNKNOWN.value, desc = "The keybind to hold for the auto clicker to click right click.").withDependency { !terminatorOnly }
 
     private val json = JsonStore("features/autoClicker")
     private val left = json.mutableSet("leftWhitelist", Codec.STRING)
@@ -55,14 +57,14 @@ object AutoClicker : Module(
         registerSetting(rightClickKeybind)
 
         on<TickStartEvent> {
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
             if (client.player == null) return@on
             if (client.player!!.isUsingItem) return@on
             if (client.gameMode?.isDestroying ?: false) return@on
             val now = System.currentTimeMillis()
 
             if (terminatorOnly) {
-                if (mc.player?.mainHandItem?.itemId != "TERMINATOR" || !mc.options.keyUse.isDown) return@on
+                if (client.player?.mainHandItem?.itemId != "TERMINATOR" || !client.options.keyUse.isDown) return@on
                 if (now < nrc) return@on
 
                 nrc = now + ((1000 / cps) + ((Math.random() - .5) * 60.0))
@@ -70,7 +72,7 @@ object AutoClicker : Module(
                 return@on
             }
 
-            val h1 = mc.player?.mainHandItem?.itemId ?: ""
+            val h1 = client.player?.mainHandItem?.itemId ?: ""
             if (blockBreaker && h1 == "DUNGEONBREAKER") return@on
 
             val h2 = held()
@@ -78,14 +80,14 @@ object AutoClicker : Module(
             val b = !whiteListOnly || h2 in right.value
             if (!a && !b) return@on
 
-            val level = mc.level ?: return@on
-            val hit = mc.hitResult as? BlockHitResult
+            val level = client.level ?: return@on
+            val hit = client.hitResult as? BlockHitResult
 
             val lc = a && enableLeftClick && GenericInputState.pressed(leftClickKeybind.value)
             val rc = b && enableRightClick && GenericInputState.pressed(rightClickKeybind.value)
 
             if (hit != null && !level.getBlockState(hit.blockPos).isAir && lc && allowBreaking) {
-                KeyMapping.set((mc.options.keyAttack as KeyMappingAccessor).boundKey, true)
+                KeyMapping.set((client.options.keyAttack as KeyMappingAccessor).boundKey, true)
                 return@on
             }
 
@@ -164,7 +166,7 @@ object AutoClicker : Module(
     }
 
     fun held(): String? {
-        val held = mc.player?.mainHandItem
+        val held = client.player?.mainHandItem
         return held?.nullableUUID ?: held?.nullableID ?: held?.hoverName?.string
     }
 }

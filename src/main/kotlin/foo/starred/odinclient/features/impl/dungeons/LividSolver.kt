@@ -47,6 +47,7 @@ import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.render.drawWireFrameBox
 import com.odtheking.odin.utils.render.textDim
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.drawTracer
 import net.minecraft.core.BlockPos
@@ -95,7 +96,7 @@ object LividSolver : Module(
             if (!DungeonUtils.inBoss || !DungeonUtils.isFloor(5)) return@onReceive
             schedule(2) {
                 currentLivid.entity =
-                    (mc.level?.getEntity(id) as? Player)?.takeIf { it.name.string == "${currentLivid.entityName} Livid" }
+                    (client.level?.getEntity(id) as? Player)?.takeIf { it.name.string == "${currentLivid.entityName} Livid" }
                         ?: return@schedule
             }
         }

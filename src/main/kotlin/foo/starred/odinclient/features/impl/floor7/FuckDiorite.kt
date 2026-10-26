@@ -44,6 +44,7 @@ import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.equalsOneOf
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.skyblock.dungeon.M7Phases
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.minecraft.core.BlockPos
 import net.minecraft.world.level.block.Blocks
@@ -115,7 +116,7 @@ object FuckDiorite : Module(
     }
 
     private fun replaceDiorite() {
-        val level = mc.level ?: return
+        val level = client.level ?: return
 
         for ((index, coordinateSet) in coordinates.withIndex()) {
             for (pos in coordinateSet) {
@@ -137,7 +138,7 @@ object FuckDiorite : Module(
             else -> GLASS_STATE
         }
 
-        mc.level?.setBlock(pos, newState, 3)
+        client.level?.setBlock(pos, newState, 3)
     }
 
     @Suppress("Unused")

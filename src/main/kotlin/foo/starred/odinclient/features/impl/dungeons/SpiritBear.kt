@@ -49,6 +49,7 @@ import com.odtheking.odin.utils.render.textDim
 import com.odtheking.odin.utils.renderBoundingBox
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.toFixed
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.drawTracer
 import net.minecraft.core.BlockPos
@@ -108,7 +109,7 @@ object SpiritBear : Module(
         on<TickEvent.End> {
             if (!DungeonUtils.isFloor(4) || !DungeonUtils.inBoss || !highlightSpirit) return@on
 
-            val entities = mc.level?.entitiesForRendering() ?: return@on
+            val entities = client.level?.entitiesForRendering() ?: return@on
             for (e in entities) {
                 if (e.isInvisible) continue
                 val entityName = e.name.string

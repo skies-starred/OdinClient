@@ -13,6 +13,7 @@ import com.odtheking.odin.utils.render.drawStyledBox
 import com.odtheking.odin.utils.render.drawText
 import com.odtheking.odin.utils.skyblock.Island
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientChunkEvents
 import net.minecraft.core.BlockPos
@@ -135,7 +136,7 @@ object WorldScanner : Module(
             }
 
             if (lavaEsp || waterEsp) {
-                val playerPos = mc.player?.position() ?: return@on
+                val playerPos = client.player?.position() ?: return@on
                 val rangeSq = espRange * espRange
                 val localMutablePos = BlockPos.MutableBlockPos()
 
@@ -166,7 +167,7 @@ object WorldScanner : Module(
         drawStyledBox(aabb, color, renderStyle, false)
 
         if (renderText && showText) {
-            val distance = mc.player?.distanceToSqr(centerPos) ?: 1.0
+            val distance = client.player?.distanceToSqr(centerPos) ?: 1.0
             val distMeters = kotlin.math.sqrt(distance)
             val scale = (distMeters / 10.0).coerceAtLeast(1.0).toFloat()
             drawText(name, centerPos.add(0.0, 1.5, 0.0), scale, false)

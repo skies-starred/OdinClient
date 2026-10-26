@@ -1,15 +1,16 @@
 package foo.starred.odinclient.features.impl.general
 
-import com.mojang.blaze3d.platform.InputConstants
 import com.odtheking.odin.clickgui.settings.impl.NumberSetting
 import com.odtheking.odin.events.core.on
 import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.events.core.onSend
 import com.odtheking.odin.features.Module
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
+import foo.starred.kontext.abstraction.input.impl.KeyboardInputState
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.mixin.accessors.KeyMappingAccessor
 import foo.starred.odinclient.api.category.OdinClientCategory
-import foo.starred.snowbird.api.client
 import net.minecraft.client.KeyMapping
 import net.minecraft.client.gui.components.EditBox
 import net.minecraft.client.gui.screens.ChatScreen
@@ -35,18 +36,18 @@ object InventoryWalk : Module(
 
     private val movementKeys: List<KeyMapping>
         get() = listOf(
-            mc.options.keyUp,
-            mc.options.keyLeft,
-            mc.options.keyRight,
-            mc.options.keyDown,
-            mc.options.keyJump,
-            mc.options.keySprint,
-            mc.options.keyShift
+            client.options.keyUp,
+            client.options.keyLeft,
+            client.options.keyRight,
+            client.options.keyDown,
+            client.options.keyJump,
+            client.options.keySprint,
+            client.options.keyShift
         )
 
     init {
         on<TickStartEvent> {
-            val screen = client.screen
+            val screen = MinecraftGui.screen
             if (screen == null) {
                 clicked = false
                 return@on
@@ -67,8 +68,8 @@ object InventoryWalk : Module(
 
         onReceive<ClientboundOpenScreenPacket> {
             clicked = false
-            mc.execute {
-                val screen = client.screen
+            client.execute {
+                val screen = MinecraftGui.screen
                 if (screen?.focused() == false) applyMovementKeys()
             }
         }
@@ -80,8 +81,7 @@ object InventoryWalk : Module(
 
     private fun applyMovementKeys() {
         movementKeys.forEach { key ->
-            val actualKey = (key as KeyMappingAccessor).boundKey
-            key.press(InputConstants.isKeyDown(mc.window, actualKey.value))
+            key.press(KeyboardInputState.pressed((key as KeyMappingAccessor).boundKey))
         }
     }
 

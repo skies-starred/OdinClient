@@ -8,10 +8,10 @@ import com.odtheking.odin.events.core.onReceive
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.hasGlint
 import com.odtheking.odin.utils.noControlCodes
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
-import foo.starred.odinclient.utils.guiClick
-import foo.starred.snowbird.api.client
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket
 import net.minecraft.world.inventory.ContainerInput
@@ -48,14 +48,14 @@ object AutoExperiments : Module(
 
         on<ScreenEvent.MouseClick> {
             if (handler == null) return@on
-            if (client.screen !is AbstractContainerScreen<*>) return@on
+            if (MinecraftGui.screen !is AbstractContainerScreen<*>) return@on
 
             cancel()
         }
 
         on<ScreenEvent.MouseRelease> {
             if (handler == null) return@on
-            if (client.screen !is AbstractContainerScreen<*>) return@on
+            if (MinecraftGui.screen !is AbstractContainerScreen<*>) return@on
 
             cancel()
         }
@@ -66,19 +66,19 @@ object AutoExperiments : Module(
 
         on<TickStartEvent> {
             val handler = handler ?: return@on
-            val screen = client.screen as? AbstractContainerScreen<*> ?: return@on
+            val screen = MinecraftGui.container ?: return@on
 
             val now = System.currentTimeMillis()
             if (now - lastClick < delay()) return@on
 
             handler.nextClick()?.let { slotId ->
-                guiClick(screen.menu.containerId, slotId, clickType = ContainerInput.CLONE)
+                MinecraftGui.click(screen.menu.containerId, slotId, clickType = ContainerInput.CLONE)
                 lastClick = now
             }
 
             if (!handler.shouldClose(autoClose)) return@on
 
-            mc.player?.closeContainer()
+            client.player?.closeContainer()
             AutoExperiments.handler = null
         }
     }
@@ -89,7 +89,7 @@ object AutoExperiments : Module(
         private var close = false
 
         override fun onSlotUpdate() {
-            val slots = (client.screen as? AbstractContainerScreen<*>)?.menu?.slots ?: return
+            val slots = MinecraftGui.container?.menu?.slots ?: return
             val center = slots[49].item
 
             if (
@@ -127,7 +127,7 @@ object AutoExperiments : Module(
         private val order = ConcurrentHashMap<Int, Int>()
 
         override fun onSlotUpdate() {
-            val slots = (client.screen as? AbstractContainerScreen<*>)?.menu?.slots ?: return
+            val slots = MinecraftGui.container?.menu?.slots ?: return
             val center = slots[49].item
 
             if (center.item == Items.CLOCK) {

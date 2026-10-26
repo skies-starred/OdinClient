@@ -49,16 +49,17 @@ import com.odtheking.odin.utils.*
 import com.odtheking.odin.utils.render.drawStyledBox
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.skyblock.dungeon.M7Phases
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.OdinClient
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.command
 import foo.starred.odinclient.utils.drawTracer
-import foo.starred.snowbird.api.client
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.ambient.Bat
 import net.minecraft.world.entity.boss.wither.WitherBoss
 import net.minecraft.world.entity.decoration.ArmorStand
+//~ if >= 26.3 'EnderMan' -> 'Enderman'
 import net.minecraft.world.entity.monster.EnderMan
 import net.minecraft.world.entity.player.Player
 
@@ -113,14 +114,14 @@ object Highlight : Module(
                 }
 
                 d && !b && highlightBats && entity is Bat && !entity.isPassenger && !entity.isInvisible -> {
-                    val player = mc.player ?: return@onReceive
+                    val player = client.player ?: return@onReceive
                     if (player.distanceTo(entity) < 1.0) {
                         spiritSceptreIds.add(entity.id)
                         return@onReceive
                     }
                 }
 
-                d && !b && highlightStar && entity is Player && entity != mc.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
+                d && !b && highlightStar && entity is Player && entity != client.player && entity.gameProfile.name.contains("Shadow Assassin") -> {
                     starredIds.add(entity.id)
                 }
 
@@ -148,7 +149,7 @@ object Highlight : Module(
         on<RenderEvent.Extract> {
             if (customIds.isEmpty() && starredIds.isEmpty() && witherIds.isEmpty() && !highlightBats) return@on
 
-            val world = mc.level ?: return@on
+            val world = client.level ?: return@on
             val bool0 = starredTracer
             val bool1 = witherTracer && DungeonUtils.getF7Phase() == M7Phases.P3
             val bool2 = customTracer
@@ -239,20 +240,21 @@ object Highlight : Module(
     }
 
     private fun ArmorStand.fn(vis: Boolean = false): Entity? {
-        val a = mc.level
+        val a = client.level
             ?.getEntities(this, boundingBox.inflate(0.0, 1.0, 0.0)) { isValidEntity(it, vis) }
             ?.firstOrNull()
 
         if (a != null) return a
 
-        return mc.level?.getEntity(id - 1)?.takeIf { isValidEntity(it, vis) }
+        return client.level?.getEntity(id - 1)?.takeIf { isValidEntity(it, vis) }
     }
 
     private fun isValidEntity(entity: Entity, vis: Boolean = false): Boolean =
         when (entity) {
             is ArmorStand -> false
-            is Player -> entity.uuid.version() == 2 && entity != mc.player
+            is Player -> entity.uuid.version() == 2 && entity != client.player
             is WitherBoss -> true
+            //~ if >= 26.3 'EnderMan' -> 'Enderman'
             else -> entity is EnderMan || (vis || !entity.isInvisible)
         }
 

@@ -7,10 +7,10 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource
 
 fun command(block: KommandBuilderScope<FabricClientCommandSource>.() -> Unit) {
-    Command.command("odc", block)
+    OdinClientCommandSource.command("odc", block)
 }
 
-private object Command : IKommand<FabricClientCommandSource> {
+object OdinClientCommandSource : IKommand<FabricClientCommandSource> {
     override val loader: KommandCommandScope<FabricClientCommandSource> = KommandCommandScope()
 
     init {

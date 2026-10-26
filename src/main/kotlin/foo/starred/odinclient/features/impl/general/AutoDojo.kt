@@ -9,6 +9,7 @@ import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.Colors
 import com.odtheking.odin.utils.render.drawStyledBox
 import com.odtheking.odin.utils.renderBoundingBox
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.mixin.accessors.InventoryAccessor
 import foo.starred.odinclient.api.category.OdinClientCategory
@@ -154,8 +155,8 @@ object AutoDojo : Module(
     }
 
     private fun handleControl() {
-        val player = mc.player ?: return
-        val level = mc.level ?: return
+        val player = client.player ?: return
+        val level = client.level ?: return
 
         var closestSkeleton: Entity? = null
         var minDist = 25.0
@@ -194,8 +195,8 @@ object AutoDojo : Module(
     }
 
     private fun handleMastery() {
-        val player = mc.player ?: return
-        val level = mc.level ?: return
+        val player = client.player ?: return
+        val level = client.level ?: return
         val now = System.currentTimeMillis()
 
         // Clean up expired blocks and verify blocks still exist
@@ -210,7 +211,7 @@ object AutoDojo : Module(
             firingTimer++
             if (firingTimer < 2) return
 
-            mc.options.keyUse.isDown = true
+            client.options.keyUse.isDown = true
             isDrawing = true
             firingState = 0
             firingTimer = 0
@@ -227,7 +228,7 @@ object AutoDojo : Module(
         (player.inventory as InventoryAccessor).setSelectedSlot(bowSlot)
 
         if (!isDrawing) {
-            mc.options.keyUse.isDown = true
+            client.options.keyUse.isDown = true
             isDrawing = true
         }
 
@@ -237,7 +238,7 @@ object AutoDojo : Module(
         if (timeRemaining >= masteryShootDelay) return
         if (!isDrawing) return
 
-        mc.options.keyUse.isDown = false
+        client.options.keyUse.isDown = false
         isDrawing = false
         firingState = 1
         firingTimer = 0
@@ -245,8 +246,8 @@ object AutoDojo : Module(
     }
 
     private fun handleDiscipline() {
-        val player = mc.player ?: return
-        val level = mc.level ?: return
+        val player = client.player ?: return
+        val level = client.level ?: return
 
         var bestZombie: Zombie? = null
         var minDistance = 7.0 // Maximum range
@@ -294,8 +295,8 @@ object AutoDojo : Module(
     }
 
     private fun scanForMasteryBlocks() {
-        val player = mc.player ?: return
-        val level = mc.level ?: return
+        val player = client.player ?: return
+        val level = client.level ?: return
         val now = System.currentTimeMillis()
 
         // Scan nearby blocks for yellow wool (within 25 block range)
@@ -322,13 +323,13 @@ object AutoDojo : Module(
     }
 
     private fun findItemSlot(it: Item): Int? {
-        val player = mc.player ?: return null
+        val player = client.player ?: return null
         for (i in 0..8) if (player.inventory.getItem(i).item  == it) return i
         return null
     }
 
     private fun selectBow() {
-        val player = mc.player ?: return
+        val player = client.player ?: return
         val bowSlot = findItemSlot(Items.BOW) ?: return
         (player.inventory as InventoryAccessor).setSelectedSlot(bowSlot)
     }

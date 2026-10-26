@@ -1,6 +1,6 @@
 package foo.starred.odinclient.utils
 
-import com.odtheking.odin.OdinMod.mc
+import foo.starred.kontext.abstraction.client.extension.client
 import kotlin.math.*
 
 object RotationUtils {
@@ -20,19 +20,19 @@ object RotationUtils {
     }
 
     fun smoothLook(targetYaw: Float, targetPitch: Float, timeMs: Long) {
-        val player = mc.player ?: return
+        val player = client.player ?: return
         startRot = Rotation(player.xRot, player.yRot)
-        
+
         val yawDiff = normalizeAngle(targetYaw - startRot.yaw)
         endRot = Rotation(targetPitch, startRot.yaw + yawDiff)
-        
+
         startTime = System.currentTimeMillis()
         endTime = startTime + timeMs
         isDone = false
     }
 
     fun smartSmoothLook(targetYaw: Float, targetPitch: Float, msPer180: Int) {
-        val player = mc.player ?: return
+        val player = client.player ?: return
 
         // If we are already rotating to this target, don't restart the timer
         if (!isDone && abs(normalizeAngle(targetYaw - endRot.yaw)) < 0.1f && abs(targetPitch - endRot.pitch) < 0.1f) {
@@ -42,26 +42,26 @@ object RotationUtils {
         val yawDiff = abs(normalizeAngle(targetYaw - player.yRot))
         val pitchDiff = abs(targetPitch - player.xRot)
         val maxDiff = max(yawDiff, pitchDiff)
-        
+
         val timeMs = (maxDiff / 180f * msPer180).toLong().coerceAtLeast(10L)
         smoothLook(targetYaw, targetPitch, timeMs)
     }
 
     fun update() {
         if (isDone) return
-        val player = mc.player ?: return
+        val player = client.player ?: return
         val now = System.currentTimeMillis()
-        
+
         if (now >= endTime) {
             player.setYRot(endRot.yaw)
             player.setXRot(endRot.pitch)
             isDone = true
             return
         }
-        
+
         val progress = (now - startTime).toDouble() / (endTime - startTime)
         val eased = easeOutCubic(progress)
-        
+
         player.setYRot(interpolate(startRot.yaw, endRot.yaw, eased))
         player.setXRot(interpolate(startRot.pitch, endRot.pitch, eased))
     }
@@ -82,14 +82,14 @@ object RotationUtils {
     }
 
     fun getRotation(x: Double, y: Double, z: Double): Rotation {
-        val player = mc.player ?: return Rotation(0f, 0f)
+        val player = client.player ?: return Rotation(0f, 0f)
         val dx = x - player.x
         val dy = y - (player.y + player.eyeHeight)
         val dz = z - player.z
 
         val yaw = Math.toDegrees(atan2(-dx, dz)).toFloat()
         val pitch = Math.toDegrees(atan2(-dy, sqrt(dx * dx + dz * dz))).toFloat()
-        
+
         return Rotation(pitch.coerceIn(-90f, 90f), yaw)
     }
 }

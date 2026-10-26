@@ -47,6 +47,7 @@ import com.odtheking.odin.utils.Color.Companion.multiplyAlpha
 import com.odtheking.odin.utils.render.drawFilledBox
 import com.odtheking.odin.utils.render.drawLine
 import com.odtheking.odin.utils.render.drawWireFrameBox
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.minecraft.core.Direction
 import net.minecraft.world.entity.Entity
@@ -95,7 +96,7 @@ object Trajectories : Module(
 
     init {
         on<TickEvent.End> {
-            val player = mc.player ?: return@on
+            val player = client.player ?: return@on
             lastCharge = charge
             val useCount = player.useItemRemainingTicks
             charge = min((72000 - useCount) / 20f, 1.0f) * 2f
@@ -108,7 +109,7 @@ object Trajectories : Module(
             boxRenderQueue.clear()
             pearlImpactPos = null
 
-            val player = mc.player ?: return@on
+            val player = client.player ?: return@on
             val heldItem = player.mainHandItem
             val term = heldItem.itemId == "TERMINATOR"
 
@@ -139,8 +140,8 @@ object Trajectories : Module(
     }
 
     private fun calculateTrajectory(yawOffset: Float, isPearl: Boolean, useCharge: Boolean = false): Pair<List<Vec3>, BlockHitResult?> {
-        val player = mc.player ?: return VEC_NULL
-        val level = mc.level ?: return VEC_NULL
+        val player = client.player ?: return VEC_NULL
+        val level = client.level ?: return VEC_NULL
 
         val yaw = Math.toRadians(player.yRot.toDouble())
         val x = -cos(yaw) * 0.16
@@ -253,7 +254,7 @@ object Trajectories : Module(
     private fun pull(b: Boolean): Float {
         if (!b) return 1f
 
-        val t = lastCharge + (charge - lastCharge) * mc.deltaTracker.getGameTimeDeltaPartialTick(true)
+        val t = lastCharge + (charge - lastCharge) * client.deltaTracker.getGameTimeDeltaPartialTick(true)
         val f = (t / 2f).coerceIn(0f, 1f)
         return (f * f + f * 2f) / 3f
     }

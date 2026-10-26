@@ -1,5 +1,6 @@
 package foo.starred.odinclient.features.impl.dungeons
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting
 import com.odtheking.odin.events.core.on
@@ -8,15 +9,15 @@ import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.itemId
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.skyblock.LocationUtils
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
+import foo.starred.kontext.abstraction.input.impl.GenericInputState
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
-import foo.starred.snowbird.api.client
-import foo.starred.snowbird.api.inputs.impl.GenericInputState
 import net.minecraft.core.BlockPos
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.BlockHitResult
-import org.lwjgl.glfw.GLFW
 
 object GhostBlock : Module(
     name = "Ghost Block",
@@ -25,7 +26,7 @@ object GhostBlock : Module(
 ) {
     private val UAYOR by BooleanSetting("Use at your own risk", desc = "This feature can get you banned if used improperly.")
     private val stonkGhostBlock by BooleanSetting("Stonk Ghost Block", true, desc = "Creates a ghost block when right-clicking with a pickaxe.")
-    private val ghostBlockKey = KeybindSetting("Ghost Block Key", GLFW.GLFW_KEY_UNKNOWN, desc = "Hold this key to create ghost blocks.")
+    private val ghostBlockKey = KeybindSetting("Ghost Block Key", InputConstants.UNKNOWN.value, desc = "Hold this key to create ghost blocks.")
 
     private val blacklist = listOf(
         Blocks.ACACIA_DOOR, Blocks.BIRCH_DOOR, Blocks.DARK_OAK_DOOR, Blocks.JUNGLE_DOOR, Blocks.OAK_DOOR, Blocks.SPRUCE_DOOR, Blocks.MANGROVE_DOOR, Blocks.CHERRY_DOOR, Blocks.BAMBOO_DOOR, Blocks.CRIMSON_DOOR, Blocks.WARPED_DOOR, Blocks.IRON_DOOR,
@@ -63,20 +64,20 @@ object GhostBlock : Module(
 
         on<TickStartEvent> {
             if (!LocationUtils.isInSkyblock) return@on
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
 
             if (!GenericInputState.pressed(ghostBlockKey.value)) return@on
 
-            val hit = (mc.hitResult as? BlockHitResult) ?: return@on
+            val hit = (client.hitResult as? BlockHitResult) ?: return@on
             toAir(hit.blockPos)
         }
 
         onSend<ServerboundUseItemOnPacket> {
             if (!LocationUtils.isInSkyblock) return@onSend
-            if (client.screen != null) return@onSend
+            if (MinecraftGui.screen != null) return@onSend
             if (!stonkGhostBlock) return@onSend
 
-            val item = mc.player?.getItemInHand(hand) ?: return@onSend
+            val item = client.player?.getItemInHand(hand) ?: return@onSend
             if ("PICKAXE" !in item.itemId) return@onSend
             if (!toAir(hitResult.blockPos)) return@onSend
 
@@ -90,7 +91,7 @@ object GhostBlock : Module(
     }
 
     private fun toAir(pos: BlockPos): Boolean {
-        val world = mc.level ?: return false
+        val world = client.level ?: return false
         val state = world.getBlockState(pos)
         val block = state.block
         if (block != Blocks.AIR && !blacklist.contains(block)) {

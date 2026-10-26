@@ -42,6 +42,7 @@ import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.equalsOneOf
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.minecraft.client.gui.screens.Screen
 import net.minecraft.client.gui.screens.inventory.ContainerScreen
@@ -67,13 +68,13 @@ object CloseChest : Module(
             if (!DungeonUtils.inDungeons) return@onReceive
             if (!title.string.noControlCodes.equalsOneOf("Chest", "Large Chest")) return@onReceive
 
-            mc.connection?.send(ServerboundContainerClosePacket(containerId))
+            client.connection?.send(ServerboundContainerClosePacket(containerId))
             it.cancel()
         }
 
         on<ScreenEvent.KeyPress> {
             if (!DungeonUtils.inDungeons) return@on
-            if (mc.options.keyInventory.matches(input)) return@on
+            if (client.options.keyInventory.matches(input)) return@on
 
             handleInput(screen)
         }
@@ -89,6 +90,6 @@ object CloseChest : Module(
         //~ if >= 26.2 'mode != 1' -> 'mode != Mode.ANY_KEY'
         if (mode != 1) return
         val screen = screen as? ContainerScreen? ?: return
-        if (screen.title.string.noControlCodes.equalsOneOf("Chest", "Large Chest")) mc.player?.closeContainer()
+        if (screen.title.string.noControlCodes.equalsOneOf("Chest", "Large Chest")) client.player?.closeContainer()
     }
 }

@@ -42,14 +42,13 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.lore
 import com.odtheking.odin.utils.modMessage
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
+import foo.starred.kontext.api.format.extension.string.stripped
 import foo.starred.odinclient.OdinClient
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.command
-import foo.starred.odinclient.utils.guiClick
-import foo.starred.snowbird.api.client
-import foo.starred.snowbird.utils.stripped
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen
 import net.minecraft.world.entity.player.Inventory
 import net.minecraft.world.inventory.ContainerInput
 import net.minecraft.world.item.Items
@@ -78,7 +77,7 @@ object AutoSell : Module(
     init {
         on<TickStartEvent> {
             if (sellList.isEmpty()) return@on
-            val menu = (client.screen as? AbstractContainerScreen<*>)?.menu ?: return@on
+            val menu = MinecraftGui.container?.menu ?: return@on
             val now = System.currentTimeMillis()
             if (now - last < next) return@on
 
@@ -96,7 +95,7 @@ object AutoSell : Module(
                 if (!sellList.any { name.contains(it, true) }) continue
                 if (blacklist.any { name.contains(it, true) }) continue
 
-                guiClick(menu.containerId, s.index, clickType = clickType1.get())
+                MinecraftGui.click(menu.containerId, s.index, clickType = clickType1.get())
                 last = now
                 delay()
 

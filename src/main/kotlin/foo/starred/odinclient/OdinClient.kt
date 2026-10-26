@@ -7,6 +7,7 @@ import com.odtheking.odin.features.ModuleManager
 import com.odtheking.odin.utils.getCenteredText
 import com.odtheking.odin.utils.getChatBreak
 import com.odtheking.odin.utils.modMessage
+import foo.starred.kontext.api.text.parser.impl.parse
 import foo.starred.odinclient.api.storage.JsonStore
 import foo.starred.odinclient.events.dispatcher.FabricEventDispatcher
 import foo.starred.odinclient.features.ImportantFeature
@@ -19,7 +20,6 @@ import foo.starred.odinclient.features.impl.floor7.SimonSays
 import foo.starred.odinclient.features.impl.general.*
 import foo.starred.odinclient.features.impl.render.NoGlow
 import foo.starred.odinclient.utils.command
-import foo.starred.snowbird.api.text.parser.impl.parse
 import foo.starred.updater.logic.source.impl.GitHubUpdateSource
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents

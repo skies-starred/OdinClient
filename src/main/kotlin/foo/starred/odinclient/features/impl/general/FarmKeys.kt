@@ -38,21 +38,21 @@ import com.mojang.blaze3d.platform.InputConstants
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting
 import com.odtheking.odin.features.Module
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.mixin.accessors.KeyMappingAccessor
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.minecraft.client.KeyMapping
-import org.lwjgl.glfw.GLFW
 
 object FarmKeys : Module(
     name = "Farm keys",
     description = "Temporarily changes your minecraft keybind configuration for farming in Skyblock.",
     category = OdinClientCategory.CHEATS
 ) {
-    private var prev: Int? = null
-    private var prev0: Int? = null
+    private var prev: InputConstants.Key? = null
+    private var prev0: InputConstants.Key? = null
 
-    private val attackKey by KeybindSetting("Block breaking", GLFW.GLFW_KEY_UNKNOWN, "Changes the keybind for breaking blocks.")
-    private val jumpKey by KeybindSetting("Jump", GLFW.GLFW_KEY_UNKNOWN, "Changes the keybind for jumping.")
+    private val attackKey by KeybindSetting("Block breaking", InputConstants.UNKNOWN.value, "Changes the keybind for breaking blocks.")
+    private val jumpKey by KeybindSetting("Jump", InputConstants.UNKNOWN.value, "Changes the keybind for jumping.")
     private val lockCamera by BooleanSetting("Lock camera", true, desc = "Locks your camera.")
 
     @JvmStatic
@@ -62,24 +62,22 @@ object FarmKeys : Module(
     override fun onEnable() {
         super.onEnable()
 
-        prev = (mc.options?.keyAttack as? KeyMappingAccessor)?.boundKey?.value
-        prev0 = (mc.options?.keyJump as? KeyMappingAccessor)?.boundKey?.value
+        prev = (client.options?.keyAttack as? KeyMappingAccessor)?.boundKey
+        prev0 = (client.options?.keyJump as? KeyMappingAccessor)?.boundKey
 
-        bind(attackKey.value, jumpKey.value)
+        bind(attackKey, jumpKey)
     }
 
     override fun onDisable() {
-        bind(prev ?: mc.options.keyAttack.defaultKey.value, prev0 ?: mc.options.keyJump.defaultKey.value)
+        bind(prev ?: client.options.keyAttack.defaultKey, prev0 ?: client.options.keyJump.defaultKey)
         super.onDisable()
     }
 
-    private fun bind(attackKeyCode: Int, jumpKeyCode: Int) {
-        val options = mc.options ?: return
+    private fun bind(attack: InputConstants.Key, jump: InputConstants.Key) {
+        val options = client.options ?: return
 
-        val key0 = if (attackKeyCode > 0) InputConstants.Type.KEYSYM.getOrCreate(attackKeyCode) else InputConstants.Type.MOUSE.getOrCreate(attackKeyCode)
-        val key1 = if (jumpKeyCode > 0) InputConstants.Type.KEYSYM.getOrCreate(jumpKeyCode) else InputConstants.Type.MOUSE.getOrCreate(jumpKeyCode)
-        if (attackKey.value != GLFW.GLFW_KEY_UNKNOWN) options.keyAttack.setKey(key0)
-        if (jumpKey.value != GLFW.GLFW_KEY_UNKNOWN) options.keyJump.setKey(key1)
+        if (attackKey != InputConstants.UNKNOWN) options.keyAttack.setKey(attack)
+        if (jumpKey != InputConstants.UNKNOWN) options.keyJump.setKey(jump)
 
         options.save()
         KeyMapping.resetMapping()

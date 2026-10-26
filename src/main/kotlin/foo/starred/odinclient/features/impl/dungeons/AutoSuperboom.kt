@@ -8,12 +8,13 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.itemId
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.InputEvent
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.mixin.accessors.InventoryAccessor
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.leftClick
-import foo.starred.snowbird.api.client
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.BlockHitResult
 
@@ -40,7 +41,7 @@ object AutoSuperboom : Module(
 
     init {
         on<InputEvent.Mouse.Press> {
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
             if (!DungeonUtils.inDungeons) return@on
             if (DungeonUtils.inBoss) return@on
             val p = client.player ?: return@on

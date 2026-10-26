@@ -49,6 +49,7 @@ import com.odtheking.odin.utils.alert
 import com.odtheking.odin.utils.equalsOneOf
 import com.odtheking.odin.utils.render.drawStyledBox
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket
 import net.minecraft.world.entity.Entity
@@ -98,7 +99,7 @@ object DoorHighlight : Module(
 
         onReceive<ClientboundSetEntityDataPacket> {
             if (!DungeonUtils.inClear) return@onReceive
-            val entity = mc.level?.getEntity(id) as? ArmorStand ?: return@onReceive
+            val entity = client.level?.getEntity(id) as? ArmorStand ?: return@onReceive
             if (currentKey?.entity == entity) return@onReceive
             currentKey = KeyType.entries.find { it.displayName == entity.name.string } ?: return@onReceive
             currentKey?.entity = entity

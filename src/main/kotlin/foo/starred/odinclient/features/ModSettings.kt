@@ -9,6 +9,5 @@ object ModSettings : Module(
     description = "Settings for some of the internal stuff in OdinClient!",
     category = OdinClientCategory.CHEATS
 ) {
-    val updateOnce by BooleanSetting("Only show update once", desc = "Toggle to only show the message to update once!")
     val important by BooleanSetting("Important thing", true, desc = "Disabling the important thing may break features!")
 }

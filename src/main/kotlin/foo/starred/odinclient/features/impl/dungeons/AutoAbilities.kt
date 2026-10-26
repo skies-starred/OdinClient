@@ -34,6 +34,7 @@
 
 package foo.starred.odinclient.features.impl.dungeons
 
+import com.mojang.blaze3d.platform.InputConstants
 import com.odtheking.odin.clickgui.settings.impl.BooleanSetting
 import com.odtheking.odin.clickgui.settings.impl.KeybindSetting
 import com.odtheking.odin.events.MessageEvent
@@ -42,8 +43,8 @@ import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.handlers.schedule
 import com.odtheking.odin.utils.modMessage
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.api.category.OdinClientCategory
-import org.lwjgl.glfw.GLFW
 
 object AutoAbilities : Module(
     name = "Auto Abilities",
@@ -51,7 +52,7 @@ object AutoAbilities : Module(
     category = OdinClientCategory.CHEATS
 ) {
     private val autoUlt by BooleanSetting("Auto Ult", false, desc = "Automatically uses your ultimate ability whenever needed.")
-    private val abilityKeybind by KeybindSetting("Ability Keybind", GLFW.GLFW_KEY_UNKNOWN, desc = "Keybind to use your ability.").onPress {
+    private val abilityKeybind by KeybindSetting("Ability Keybind", InputConstants.UNKNOWN.value, desc = "Keybind to use your ability.").onPress {
         if (!DungeonUtils.inDungeons || !enabled) return@onPress
         dropItem(dropAll = true)
     }
@@ -73,7 +74,10 @@ object AutoAbilities : Module(
 
     private fun dropItem(dropAll: Boolean = false, delay: Int = 1) {
         schedule(delay) {
-            mc.player?.drop(dropAll)
+            //? if >= 26.3 {
+            /*client.gameMode?.dropItem(client.player ?: return@schedule, dropAll)
+            *///? } else {
+            client.player?.drop(dropAll)//?}
         }
     }
 }

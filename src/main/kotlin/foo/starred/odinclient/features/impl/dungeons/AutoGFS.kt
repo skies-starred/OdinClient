@@ -51,10 +51,11 @@ import com.odtheking.odin.utils.sendCommand
 import com.odtheking.odin.utils.skyblock.KuudraUtils
 import com.odtheking.odin.utils.skyblock.LocationUtils
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.mixin.accessors.PuzzleSolversAccessor
 import foo.starred.odinclient.api.category.OdinClientCategory
-import foo.starred.snowbird.api.client
 
 object AutoGFS : Module(
     name = "Auto GFS",
@@ -110,8 +111,8 @@ object AutoGFS : Module(
     }
 
     private fun refill() {
-        if (client.screen != null) return
-        val inventory = mc.player?.inventory ?: return
+        if (MinecraftGui.screen != null) return
+        val inventory = client.player?.inventory ?: return
         if (inSkyblock && !LocationUtils.isInSkyblock) return
         if (!inSkyblock && !((inKuudra && KuudraUtils.inKuudra) || (inDungeon && DungeonUtils.inDungeons))) return
 

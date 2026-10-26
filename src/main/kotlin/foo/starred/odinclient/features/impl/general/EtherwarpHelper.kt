@@ -7,15 +7,17 @@ import com.odtheking.odin.events.core.on
 import com.odtheking.odin.features.Module
 import com.odtheking.odin.utils.customData
 import com.odtheking.odin.utils.itemId
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.InputEvent
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.mixin.accessors.KeyMappingAccessor
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.rightClick
-import foo.starred.snowbird.api.client
 import net.minecraft.client.KeyMapping
 import net.minecraft.world.InteractionHand
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.item.component.SwingAnimation
 
 object EtherwarpHelper : Module(
     name = "Etherwarp helper",
@@ -30,17 +32,17 @@ object EtherwarpHelper : Module(
 
     init {
         on<InputEvent.Mouse.Press> {
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
             if (!leftClickEW) return@on
             if (buttonInfo.button != 0) return@on
 
-            val player = mc.player ?: return@on
+            val player = client.player ?: return@on
             if (!player.mainHandItem.etherwarp()) return@on
 
             val a = player.isCrouching
             if (!a && !lceShift) return@on
             if (!a && ticksLeft == 0) {
-                KeyMapping.set((mc.options.keyShift as KeyMappingAccessor).boundKey, true)
+                KeyMapping.set((client.options.keyShift as KeyMappingAccessor).boundKey, true)
                 ticksLeft = delays.random()
                 return@on cancel()
             }
@@ -53,26 +55,29 @@ object EtherwarpHelper : Module(
 
         on<TickStartEvent> {
             if (ticksLeft == 0) return@on
-
             ticksLeft--
 
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
             when (ticksLeft) {
                 1 -> action()
-                0 -> KeyMapping.set((mc.options.keyShift as KeyMappingAccessor).boundKey, false)
+                0 -> KeyMapping.set((client.options.keyShift as KeyMappingAccessor).boundKey, false)
             }
         }
     }
 
     private fun action() {
         rightClick()
-        with (mc.player ?: return) {
-            if (swinging && swingTime >= 0) return
+        val player = client.player ?: return
 
-            swingingArm = InteractionHand.MAIN_HAND
-            swingTime = -1
-            swinging = true
-        }
+        //? if >= 26.3 {
+        /*if (player.isSwinging) return
+        player.swing(InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT, false)
+        *///? } else {
+        if (player.swinging && player.swingTime >= 0) return
+        player.swingingArm = InteractionHand.MAIN_HAND
+        player.swingTime = -1
+        player.swinging = true
+        //? }
     }
 
     private fun ItemStack.etherwarp(): Boolean =

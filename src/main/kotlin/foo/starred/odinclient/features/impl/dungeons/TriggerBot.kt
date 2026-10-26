@@ -12,10 +12,11 @@ import com.odtheking.odin.utils.equalsOneOf
 import com.odtheking.odin.utils.noControlCodes
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
 import com.odtheking.odin.utils.skyblock.dungeon.M7Phases
+import foo.starred.kontext.abstraction.client.extension.client
+import foo.starred.kontext.abstraction.gui.MinecraftGui
 import foo.starred.odinclient.events.TickStartEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
 import foo.starred.odinclient.utils.rightClick
-import foo.starred.snowbird.api.client
 import net.minecraft.core.BlockPos
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal
 import net.minecraft.world.phys.BlockHitResult
@@ -50,11 +51,11 @@ object TriggerBot : Module(
             if (DungeonUtils.getF7Phase() != M7Phases.P1) return@on
             if (System.currentTimeMillis() - click < 500) return@on
 
-            val hit = mc.hitResult ?: return@on
+            val hit = client.hitResult ?: return@on
             if (hit.type != HitResult.Type.ENTITY) return@on
 
             val e = (hit as? EntityHitResult)?.entity ?: return@on
-            val p = mc.player ?: return@on
+            val p = client.player ?: return@on
 
             if (!take && !place) return@on
             if (take && e is EndCrystal) {
@@ -75,11 +76,11 @@ object TriggerBot : Module(
             if (!secret) return@on
             if (!DungeonUtils.inDungeons) return@on
             if (DungeonUtils.inBoss) return@on
-            if (client.screen != null) return@on
+            if (MinecraftGui.screen != null) return@on
             if (System.currentTimeMillis() - click0 < delay) return@on
             if (DungeonUtils.currentRoomName.equalsOneOf("Water Board", "Three Weirdos")) return@on
 
-            val hit = mc.hitResult ?: return@on
+            val hit = client.hitResult ?: return@on
             if (hit.type != HitResult.Type.BLOCK) return@on
 
             val pos = (hit as? BlockHitResult)?.blockPos ?: return@on

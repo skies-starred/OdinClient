@@ -11,6 +11,7 @@ import com.odtheking.odin.utils.itemId
 import com.odtheking.odin.utils.loreString
 import com.odtheking.odin.utils.render.textDim
 import com.odtheking.odin.utils.skyblock.dungeon.DungeonUtils
+import foo.starred.kontext.abstraction.client.extension.client
 import foo.starred.odinclient.events.InteractEvent
 import foo.starred.odinclient.api.category.OdinClientCategory
 import net.minecraft.core.BlockPos
@@ -64,7 +65,7 @@ object BreakerHelper : Module(
             if (!DungeonUtils.inDungeons) return@on
             if (item.itemId != "DUNGEONBREAKER") return@on
 
-            val state = mc.level?.getBlockState(pos) ?: return@on
+            val state = client.level?.getBlockState(pos) ?: return@on
             val block = state.block
 
             if (block !in blacklistedBlocks && !DungeonUtils.isSecret(state, pos)) return@on
@@ -83,8 +84,8 @@ object BreakerHelper : Module(
 
     @JvmStatic
     fun onHitBlock(pos: BlockPos) {
-        val player = mc.player ?: return
-        val level = mc.level ?: return
+        val player = client.player ?: return
+        val level = client.level ?: return
 
         if (!enabled || !onlyWhenFatigue || !DungeonUtils.inDungeons || charges == 0) return
         if (player.mainHandItem.itemId != "DUNGEONBREAKER") return
