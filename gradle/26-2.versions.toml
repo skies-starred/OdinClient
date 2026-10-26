@@ -4,6 +4,7 @@ compatibility = "26.2.x"
 fabric-api = "0.158.0+26.2"
 
 odin = "9bsBi70Z"
+odin-compat = "0.3.6"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }

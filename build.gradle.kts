@@ -66,7 +66,7 @@ kotlin {
 
 tasks {
     processResources {
-        val r = mapOf("id" to mod("id"), "name" to mod("name"), "version" to mod("version"), "minecraft" to lib("compatibility"))
+        val r = mapOf("id" to mod("id"), "name" to mod("name"), "version" to mod("version"), "minecraft" to lib("compatibility"), "odin" to lib("odin-compat"))
 
         inputs.properties(r)
         filesMatching("fabric.mod.json") { expand(r) }
