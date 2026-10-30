@@ -10,9 +10,9 @@ fabric-language-kotlin = "1.13.13+kotlin.2.4.10"
 
 kbus = "2026.09.3"
 kommand = "2026.09.2"
-kontext = "2026.10.4"
+kontext = "2026.10.10"
 cascade = "2026.10.1"
-updater = "2026.10.2"
+updater = "2026.10.3"
 
 lwjgl-nanovg = "3.4.1"
 

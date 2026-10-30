@@ -23,6 +23,7 @@ import net.minecraft.world.phys.BlockHitResult
 
 //~ if >= 26.2 'Setting' -> 'RenderableSetting'
 import com.odtheking.odin.clickgui.settings.Setting.Companion.withDependency
+import foo.starred.kontext.api.storage.impl.generic.extension.mutableSet
 
 object AutoClicker : Module(
     name = "Auto Clicker",

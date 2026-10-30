@@ -7,6 +7,7 @@ import com.odtheking.odin.features.ModuleManager
 import com.odtheking.odin.utils.getCenteredText
 import com.odtheking.odin.utils.getChatBreak
 import com.odtheking.odin.utils.modMessage
+import foo.starred.kontext.api.storage.impl.generic.extension.string
 import foo.starred.kontext.api.text.parser.impl.parse
 import foo.starred.odinclient.api.storage.JsonStore
 import foo.starred.odinclient.events.dispatcher.FabricEventDispatcher
