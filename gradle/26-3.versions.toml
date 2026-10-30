@@ -3,8 +3,8 @@ minecraft = "26.3"
 compatibility = "26.3.x"
 fabric-api = "0.160.4+26.3"
 
-odin = "LCBBWkQx"
-odin-compat = "0.3.7"
+odin = "iaUj8pGx"
+odin-compat = "0.4.0"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
