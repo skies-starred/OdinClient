@@ -35,6 +35,7 @@ dependencies {
 
     shadow(libs.kbus)
     shadow(libs.kommand)
+    shadow(libs.klassgraph)
     shadow(libs.kontext.find())
     shadow(libs.cascade.find())
     shadow(libs.updater.find())
